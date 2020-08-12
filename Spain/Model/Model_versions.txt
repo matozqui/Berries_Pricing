@@ -1,0 +1,12 @@
+These are the model versions generated:
+##Best ARIMA(8, 0, 1) // MAE=0.359 // Updated 20200811_164519##
+##BLUEBERRIES ES // Best ARIMA(8, 0, 1) // MAE=0.359 // Updated 20200811_171839##
+##BLUEBERRIES ES // Best ARIMA(8, 0, 1) // MAE=0.359 // Updated 20200811_172132##
+##BLUEBERRIES ES // Best ARIMA(8, 0, 1) // MAE=0.359 // Updated 20200811_172147##
+##BLUEBERRIES ES // Best ARIMA(8, 0, 1) // MAE=0.359 // Updated 20200811_172716##
+##BLUEBERRIES ES // Best ARIMA(8, 0, 1) // MAE=0.359 // Updated 20200811_174803##
+##BLUEBERRIES ES // Best ARIMA(8, 0, 1) // MAE=0.359 // Updated 20200811_175333##
+##RASPBERRIES ES // Best ARIMANone // MAE=inf // Updated 20200811_180214##
+##STRAWBERRIES ES // Best ARIMANone // MAE=inf // Updated 20200811_180328##
+##RASPBERRIES ES // Best ARIMA(5, 1, 1) // MAE=0.375 // Updated 20200811_212836##
+##STRAWBERRIES ES // Best ARIMA(1, 0, 0) // MAE=0.258 // Updated 20200811_231358##
