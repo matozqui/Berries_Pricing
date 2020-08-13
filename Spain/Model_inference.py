@@ -83,8 +83,17 @@ def model_prediction(ctry,crop,regn,catg,pkge,crcy,msre,mdel):
     # Load all data with price dates greater than the N last days from today
     upd = 0
 
+    # https://bytes.com/topic/python/answers/166025-python-mysql-insert-null
     for index,row in df_price_model.iterrows():
-        cursor.execute("INSERT INTO dbo.prices_prediction([Product],[Country],[Region],[Category],[Package],[Date_price],[Currency],[Measure],[Model],[Price],[Price_estimated],[Updated]) values (?,?,?,?,?,?,?,?,?,?,?,?)",crop,ctry,regn,catg,pkge,row['key_0'],crcy,msre,mdel,row['Price'],row['Price_estimated'],datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+        if row['Price_estimated'] == 0:
+            price_estimated = None 
+        else: 
+            price_estimated = row['Price_estimated']
+        if row['Price'] == 0: 
+            price_real = None 
+        else: 
+            price_real = row['Price']
+        cursor.execute("INSERT INTO dbo.prices_prediction([Product],[Country],[Region],[Category],[Package],[Date_price],[Currency],[Measure],[Model],[Price],[Price_estimated],[Updated]) values (?,?,?,?,?,?,?,?,?,?,?,?)",crop,ctry,regn,catg,pkge,row['key_0'],crcy,msre,mdel,price_real,price_estimated,datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
         connStr.commit()
         upd += 1
 
