@@ -103,6 +103,7 @@ def train_arima_model(crop,ctry):
     import datetime
     from datetime import datetime, timedelta
     import matplotlib.pyplot as plt
+    from sklearn.model_selection import train_test_split
 
     crop_lc = crop.lower()
     ctry_lc = ctry.lower()
@@ -138,8 +139,9 @@ def train_arima_model(crop,ctry):
     best_model = evaluate_models(df_prices_all.values, p_values, d_values, q_values, crop, ctry, dfNullID)
 
     ### Our data is weekly based and the exploratory analysis has shown us that there is a clear seasonality. 
-    ### So let's set up seasonal_order parameter to see if we improve the estimation.
-    model = SARIMAX(df_prices_all, order = best_model, seasonal_order=(1, 1, 1, 52)).fit()
+    ### So let's set up seasonal_order parameter to see if we improve the estimation and for train data (all observations except the last year)
+    df_prices_all_train, df_prices_all_test =         train_test_split(df_prices_all, shuffle=False, test_size=len(df_prices_all[df_prices_all.index.year==max(df_prices_all.index.year)]))
+    model = SARIMAX(df_prices_all_train, order = best_model, seasonal_order=(1, 1, 1, 52)).fit()
 
     # SAVE MODEL
     # monkey patch around bug in ARIMA class

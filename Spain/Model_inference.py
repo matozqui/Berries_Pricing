@@ -72,7 +72,7 @@ def model_prediction(ctry,crop,regn,catg,pkge,crcy,msre,mdel):
     df_pred=df_pred['Price_estimated'].to_frame()
 
     # Import prediction data to BI
-    df_price_model = df_pred.merge(df_prices_all,how='outer',left_on=df_pred.index,right_on=df_prices_all.index).set_index('key_0').reset_index().fillna(0)
+    df_price_model = df_pred.merge(df_prices_non_zero,how='outer',left_on=df_pred.index,right_on=df_prices_non_zero.index).set_index('key_0').reset_index().fillna(0)
     connStr = pyodbc.connect('DRIVER={ODBC Driver 13 for SQL Server};SERVER=bipro02\\adminbi;DATABASE=Prices;Trusted_Connection=yes')
     cursor = connStr.cursor()
 
@@ -92,5 +92,9 @@ def model_prediction(ctry,crop,regn,catg,pkge,crcy,msre,mdel):
     connStr.close()    
 
     return (print(upd," new prices added"))
+
+
+# %%
+
 
 
