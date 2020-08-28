@@ -4,11 +4,8 @@
 # # Modeling
 
 # %%
-## First model --> https://www.youtube.com/watch?v=WjeGUs6mzXg
-# https://machinelearningmastery.com/grid-search-arima-hyperparameters-with-python/
-
 # evaluate an ARIMA model for a given order (p,d,q)
-def evaluate_arima_model(X, arima_order,dfNullID):
+def evaluate_arima_model(X, exog, arima_order, dfNullID):
 	from statsmodels.tsa.statespace.sarimax import SARIMAX
 	from sklearn.metrics import mean_squared_error
 	from sklearn.metrics import mean_absolute_error
@@ -26,26 +23,34 @@ def evaluate_arima_model(X, arima_order,dfNullID):
 	from datetime import datetime, timedelta
 	import matplotlib.pyplot as plt
 
-	# prepare training dataset
-	X_clean = pd.DataFrame(X)[~pd.DataFrame(X).index.isin(dfNullID['ID'])].values # Pick only campaign weeks for measure the prediction error
+	# Training dataset preparation
+	# Pick only campaign weeks for measure the prediction error
+	X_clean = pd.DataFrame(X)[~pd.DataFrame(X).index.isin(dfNullID['ID'])].values
+
+	# Endogenous feature
 	train_size = int(len(X_clean) * 0.66)
 	train, test = X_clean[0:train_size], X_clean[train_size:]
-	history = [x for x in train]
+	X_history = [x for x in train]
+
+	# Exogenous features
+	exog_clean = pd.DataFrame(exog)[~pd.DataFrame(exog).index.isin(dfNullID['ID'])].values
+	train_exog, test_exog = exog_clean[0:train_size], exog_clean[train_size:]
+	exog_history = [y for y in train_exog]
+
 	# make predictions
 	predictions = list()
 	for t in range(len(test)):
-		model_fit = SARIMAX(history, order=arima_order).fit()
-		#model_fit = model.fit(disp=0)
-		yhat = model_fit.forecast()[0]
+		model_fit = SARIMAX(pd.DataFrame(X_history), exog=pd.DataFrame(exog_history), order=arima_order).fit()
+		yhat = model_fit.predict()[0] #forecast
 		predictions.append(yhat)
-		history.append(test[t])
+		X_history.append(test[t])
 	# calculate out of sample error
 	error = mean_absolute_error(test, predictions) #MAE is the metric selected as price fluctuation could be up or down
 
 	return error
 
 # evaluate combinations of p, d and q values for an ARIMA model
-def evaluate_models(dataset, p_values, d_values, q_values, crop, ctry, dfNullID):
+def evaluate_models(dataset, exog, p_values, d_values, q_values, crop, ctry, dfNullID):
 	from statsmodels.tsa.statespace.sarimax import SARIMAX
 	from sklearn.metrics import mean_squared_error
 	from sklearn.metrics import mean_absolute_error
@@ -69,7 +74,7 @@ def evaluate_models(dataset, p_values, d_values, q_values, crop, ctry, dfNullID)
 			for q in q_values:
 				order = (p,d,q)
 				try:
-					mae = evaluate_arima_model(dataset, order, dfNullID)
+					mae = evaluate_arima_model(dataset, exog, order, dfNullID)
 					if mae < best_score:
 						best_score, best_cfg = mae, order
 					print('ARIMA%s MAE=%.3f' % (order,mae))
@@ -86,7 +91,7 @@ def evaluate_models(dataset, p_values, d_values, q_values, crop, ctry, dfNullID)
 
 
 # %%
-def train_arima_model(crop,ctry):
+def train_sarimax_model(crop,ctry,trade_ctry):
     from statsmodels.tsa.statespace.sarimax import SARIMAX
     from sklearn.metrics import mean_squared_error
     from sklearn.metrics import mean_absolute_error
@@ -104,6 +109,7 @@ def train_arima_model(crop,ctry):
     from datetime import datetime, timedelta
     import matplotlib.pyplot as plt
     from sklearn.model_selection import train_test_split
+    from dateutil.relativedelta import relativedelta
 
     crop_lc = crop.lower()
     ctry_lc = ctry.lower()
@@ -131,17 +137,77 @@ def train_arima_model(crop,ctry):
     dfIndex.columns = ['Date_price','ID']
     dfNullID = dfIndex.merge(dfNull, how='inner', on='Date_price')    # this dataframe contains the null indexes with their original index id
 
+    # Obtaining exogenous variable for SARIMAX model
+
+    # ------------------------------------------------ VOLUMES ------------------------------------------------
+    # UE volumes import from Spain (Agronometrics)
+    
+    connStr = pyodbc.connect('DRIVER={ODBC Driver 13 for SQL Server};SERVER=bipro02\\adminbi;DATABASE=Prices;Trusted_Connection=yes')
+    cursor = connStr.cursor()
+
+    qry = f"SELECT * FROM [Prices].[dbo].[volumes] where cast([Country] as nvarchar) = cast('{trade_ctry}' as nvarchar) and cast([Product] as nvarchar) = cast('{crop}' as nvarchar) and cast([Trade_Country] as nvarchar) = cast('{ctry}' as nvarchar)"
+
+    df_volumes = pd.read_sql(qry, connStr)
+
+    df_volumes = df_volumes[df_volumes.Campaign > min(df_volumes.Campaign)][['Date_volume', 'Volume']]
+    df_volumes.groupby('Date_volume').agg('sum')
+    df_volumes.set_index('Date_volume',inplace=True)
+    df_volumes.sort_index(inplace=True)
+    df_volumes.index = df_volumes.index.astype('datetime64[ns]') 
+    df_volumes = df_volumes.resample('W-MON').sum()
+
+    # ---------------------------------------------- LABOUR COST ----------------------------------------------
+    # Labor Cost index evolution in Spain (https://www.mapa.gob.es)
+
+    # May need to lag 1 year in order to allocate campaign costs to the actual fresh produce sales  
+    yr_adj = 1
+
+    # 1985-2017 file
+    df = pd.read_excel('./Data/LaborCostIndex/indicesysalariosagrariosenero1985-diciembre2017_tcm30-539891.xlsx',sheet_name='IS',header=3,usecols = ['AÑO','Anual'])
+    df.AÑO = pd.to_datetime(df.AÑO, format='%Y')
+    df.rename(columns={'AÑO': 'year', 'Anual': 'labour_index'}, inplace=True)
+    df = df[(df.year.duplicated(keep='first')==False) & df.year.notnull()]
+    df.year = df.year.apply(lambda x : x + relativedelta(years=yr_adj))
+    df.set_index('year', inplace=True)
+    df_salaries = df
+
+    # 2018-2020 file
+    df = pd.read_excel('./Data/LaborCostIndex/indicesysalariosagrariosenero2018-marzo2020_tcm30-541202.xlsx',sheet_name='IndSal2',header=3,usecols=['AÑO','Enero','Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiem.', 'Octubre', 'Noviem.', 'Diciem.'])
+    df.AÑO = pd.to_datetime(df.AÑO, format='%Y')
+    df.rename(columns={'AÑO': 'year'}, inplace=True)
+    df = df[(df.year.duplicated(keep='first')==False) & df.year.notnull()]
+    df.year = df.year.apply(lambda x : x + relativedelta(years=yr_adj))
+    df.set_index('year', inplace=True)
+    df = df.transpose().replace(0, np.NaN).mean(skipna=True).to_frame()
+    df.rename(columns={0: 'labour_index'}, inplace=True)
+
+    df_salaries = df_salaries.append(df)
+    df_salaries.index = df_salaries.index.astype('datetime64[ns]') 
+    df_salaries = df_salaries.resample('W-MON').mean().fillna(method='ffill')
+
     # Evaluate parameters
-    p_values = range(0, 10)
-    d_values = range(0, 5)
-    q_values = range(0, 5)
+    #p_values = range(0, 10)
+    #d_values = range(0, 5)
+    #q_values = range(0, 5)
+    p_values = range(8, 9)
+    d_values = range(0, 1)
+    q_values = range(1, 2)
     warnings.filterwarnings("ignore")
-    best_model = evaluate_models(df_prices_all.values, p_values, d_values, q_values, crop, ctry, dfNullID)
+
+    # Save exogenous dataframe with same shape as endogenous dataset for getting best model
+    exog = df_prices_all.join(df_salaries.join(df_volumes).fillna(value=0)).drop('Price',axis=1)
+
+    best_model = evaluate_models(df_prices_all.values, exog, p_values, d_values, q_values, crop, ctry, dfNullID)
 
     ### Our data is weekly based and the exploratory analysis has shown us that there is a clear seasonality. 
     ### So let's set up seasonal_order parameter to see if we improve the estimation and for train data (all observations except the last year)
-    df_prices_all_train, df_prices_all_test =         train_test_split(df_prices_all, shuffle=False, test_size=len(df_prices_all[df_prices_all.index.year==max(df_prices_all.index.year)]))
-    model = SARIMAX(df_prices_all_train, order = best_model, seasonal_order=(1, 1, 1, 52)).fit()
+    df_prices_all_train, df_prices_all_test = train_test_split(df_prices_all, shuffle=False, test_size=len(df_prices_all[df_prices_all.index.year==max(df_prices_all.index.year)]))
+    
+    # Save exogenous dataframe with same shape as endogenous dataset for creating the model
+    exog_train = df_prices_all_train.join(df_salaries.join(df_volumes).fillna(value=0)).drop('Price',axis=1)
+
+    # Generate model!
+    model = SARIMAX(df_prices_all_train, exog = exog_train, order = best_model, seasonal_order=(1, 1, 1, 52)).fit()
 
     # SAVE MODEL
     # monkey patch around bug in ARIMA class
@@ -150,7 +216,7 @@ def train_arima_model(crop,ctry):
     ARIMA.__getnewargs__ = __getnewargs__
 
     # save model
-    model.save(f'Model/model_arima_{crop_lc}_{ctry_lc}.pkl')
+    model.save(f'Model/model_sarimax_{crop_lc}_{ctry_lc}.pkl')
 
     # save model info		
     plt.rc('figure', figsize=(12, 7))
