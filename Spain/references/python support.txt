@@ -1,3 +1,9 @@
-Python project file structure: https://visualgit.readthedocs.io/en/latest/pages/project_file_structure.html
-How to Structure a Python-Based Data Science Project: https://medium.com/swlh/how-to-structure-a-python-based-data-science-project-a-short-tutorial-for-beginners-7e00bff14f56
-Sarimax tutorials: https://medium.com/datadriveninvestor/time-series-prediction-using-sarimax-a6604f258c56
+Python project file structure: 
+	https://visualgit.readthedocs.io/en/latest/pages/project_file_structure.html
+
+How to Structure a Python-Based Data Science Project: 
+	https://medium.com/swlh/how-to-structure-a-python-based-data-science-project-a-short-tutorial-for-beginners-7e00bff14f56
+
+Sarimax tutorials: 
+	https://medium.com/datadriveninvestor/time-series-prediction-using-sarimax-a6604f258c56
+	https://machinelearningmastery.com/grid-search-arima-hyperparameters-with-python/

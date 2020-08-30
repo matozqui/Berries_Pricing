@@ -5,6 +5,9 @@
 
 # %%
 def model_prediction(ctry,crop,regn,catg,pkge,crcy,msre,mdel):
+
+    ##  Function to call a model and make price predictions   ##
+
     import pyodbc
     import pandas as pd
     import datetime
@@ -54,7 +57,7 @@ def model_prediction(ctry,crop,regn,catg,pkge,crcy,msre,mdel):
     ctry_lc = ctry.lower()
     crop_lc = crop.lower()
     mdel_lc = mdel.lower()
-    model_name = f'Model/model_{mdel_lc}_{crop_lc}_{ctry_lc}.pkl'
+    model_name = f'../../data/04_models/model_{mdel_lc}_{crop_lc}_{ctry_lc}.pkl'
     ld_model = ARIMAResults.load(model_name)
 
     # make predictions for last year and the following
@@ -101,9 +104,5 @@ def model_prediction(ctry,crop,regn,catg,pkge,crcy,msre,mdel):
     connStr.close()    
 
     return (print(upd," new prices added"))
-
-
-# %%
-
 
 

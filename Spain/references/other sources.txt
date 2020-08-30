@@ -1,0 +1,2 @@
+Time Series Talk Seasonal ARIMA Model: 
+	https://www.youtube.com/watch?v=WjeGUs6mzXg

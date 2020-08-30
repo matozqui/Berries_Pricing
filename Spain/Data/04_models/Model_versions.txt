@@ -27,3 +27,4 @@ These are the model versions generated:
 ##BLUEBERRIES ES // Best ARIMANone // MAE=inf // Updated 20200829_172331##
 ##BLUEBERRIES ES // Best ARIMA(8, 0, 1) // MAE=0.488 // Updated 20200829_173119##
 ##BLUEBERRIES ES // Best ARIMA(8, 0, 1) // MAE=0.488 // Updated 20200829_193054##
+##BLUEBERRIES ES // Best ARIMA(8, 0, 1) // MAE=0.712 // Updated 20200830_132755##
