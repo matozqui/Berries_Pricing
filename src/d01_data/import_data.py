@@ -35,6 +35,7 @@ def get_prices_junta():
     sys.path.append('../../src/d03_modelling')
     import transformations as transf
     import config
+    import paths
     import pandas as pd
     import numpy as np
     import pyodbc
@@ -49,9 +50,9 @@ def get_prices_junta():
     rows_skip_15 = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
     cols = [0,1]
     file_names_year = [  
-                        ['../../data/01_raw/prices/ArandanoPreciosAgricultor.xls',sheet_name,rows_skip_15,cols,'PriceProducer','BLUEBERRIES',0,25],\
-                        ['../../data/01_raw/prices/FrambuesaPreciosAgricultor.xls',sheet_name,rows_skip_15,cols,'PriceProducer','RASPBERRIES',35,25],\
-                        ['../../data/01_raw/prices/FresaPreciosAgricultor.xls',sheet_name,rows_skip_15,cols,'PriceProducer','STRAWBERRIES',48,22]\
+                        [paths.path_price_es_blue,sheet_name,rows_skip_15,cols,'PriceProducer','BLUEBERRIES',0,25],\
+                        [paths.path_price_es_rasp,sheet_name,rows_skip_15,cols,'PriceProducer','RASPBERRIES',35,25],\
+                        [paths.path_price_es_strw,sheet_name,rows_skip_15,cols,'PriceProducer','STRAWBERRIES',48,22]\
                     ]
 
     price = pd.DataFrame()
@@ -145,7 +146,7 @@ def get_prices_usda(crop,crop_abb):
     import pyodbc
 
     # Read format conversions to KG
-    connStr = pyodbc.connect('DRIVER={ODBC Driver 13 for SQL Server};SERVER=bipro02\\adminbi;DATABASE=Prices;Trusted_Connection=yes')
+    connStr = pyodbc.connect(config.db_con)
     cursor = connStr.cursor()
 
     qry_formats = "SELECT * FROM [Prices].[dbo].[formats]"
@@ -227,7 +228,7 @@ def get_prices_usda(crop,crop_abb):
     return prices
 
 # %% [markdown]
-# ### Common scripts
+# ### Load database script (common)
 
 # %%
 def load_prices_bbdd(df_prices):
@@ -251,7 +252,7 @@ def load_prices_bbdd(df_prices):
     ctry = re.sub('[^A-Za-z0-9]+', "','", str(df_prices.Country.unique()))[2:-2]
     crop = re.sub('[^A-Za-z0-9]+', "','", str(df_prices.Product.unique()))[2:-2]
 
-    connStr = pyodbc.connect('DRIVER={ODBC Driver 13 for SQL Server};SERVER=bipro02\\adminbi;DATABASE=Prices;Trusted_Connection=yes')
+    connStr = pyodbc.connect(config.db_con)
     cursor = connStr.cursor()
 
     # Setting dates
@@ -474,7 +475,7 @@ def get_volumes_usda(crop,crop_abb):
     return volumes
 
 # %% [markdown]
-# ### Common scripts
+# ### Load database script (common)
 
 # %%
 def load_volumes_bbdd(df_volumes):
@@ -483,6 +484,7 @@ def load_volumes_bbdd(df_volumes):
 
     import sys
     sys.path.insert(0, '../../src')
+    sys.path.append('../../src/d00_utils')
     sys.path.append('../../src/d01_data')
     sys.path.append('../../src/d02_processing')
     sys.path.append('../../src/d03_modelling')
@@ -491,11 +493,12 @@ def load_volumes_bbdd(df_volumes):
     import pyodbc
     from datetime import datetime, timedelta
     import re
+    import stringing as st
 
-    ctry = re.sub('[^A-Za-z0-9]+', "','", str(df_volumes.Country.unique()))[2:-2]
-    crop = re.sub('[^A-Za-z0-9]+', "','", str(df_volumes.Product.unique()))[2:-2]
+    ctry = st.get_comma_values(df_volumes.Country)
+    crop = st.get_comma_values(df_volumes.Product)
 
-    connStr = pyodbc.connect('DRIVER={ODBC Driver 13 for SQL Server};SERVER=bipro02\\adminbi;DATABASE=Prices;Trusted_Connection=yes')
+    connStr = pyodbc.connect(config.db_con)
     cursor = connStr.cursor()
 
     # Setting dates
