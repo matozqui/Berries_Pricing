@@ -227,7 +227,7 @@ def get_prices_usda(crop,crop_abb):
     return prices
 
 # %% [markdown]
-# ## Common scripts
+# ### Common scripts
 
 # %%
 def load_prices_bbdd(df_prices):
@@ -257,14 +257,6 @@ def load_prices_bbdd(df_prices):
     # Setting dates
     # Date from
     fdate = datetime.today() - timedelta(days=config.ndays)
-    fday = fdate.strftime('%d')
-    fmonth = fdate.strftime('%m')
-    fyear = fdate.strftime('%Y')
-
-    # Date to : current date data to collect updated information
-    tday = date.today().strftime('%d')
-    tmonth = date.today().strftime('%m')
-    tyear = date.today().strftime('%Y')
 
     # Delete all data with price dates greater than the ndays parameter last days from today
 # Delete all data with price dates greater than the ndays parameter last days from today
@@ -293,8 +285,6 @@ def load_prices_bbdd(df_prices):
 # # Volumes
 # %% [markdown]
 # ## European Union
-# %% [markdown]
-# ### Source
 # %% [markdown]
 # Market Data Source: 
 # 
@@ -355,8 +345,7 @@ def get_volumes_ibo():
     # Drop 'Sum' lines which include all countries groupped
     volume.drop(volume[volume['Trade_country']=='SUM'].index, inplace=True)
     # Set date column
-    volume.rename(columns={"Week": "Week_num"}, inplace = True)
-    volume['Week_desc'] = volume['Week_num'].astype('str').str.cat(volume['Year'].astype('str'), sep ="-")
+    volume['Week_desc'] = volume['Week'].astype('str').str.cat(volume['Year'].astype('str'), sep ="-")
     volume['Date_ref'] = volume['Week_desc'].apply(lambda x: datetime.datetime.strptime(x + '-1', '%V-%G-%u') )
     # Add fixed values
     volume['Measure'] = 'KG'
@@ -367,8 +356,125 @@ def get_volumes_ibo():
     volume['Package'] = 'std'
     volume['Transport'] = 'na'
 
+    volume.rename(columns={'Year' : 'Campaign', 'Week' : 'Campaign_wk'},errors="raise",inplace=True)
+
     return volume
 
+# %% [markdown]
+# ## United States
+# %% [markdown]
+# Market Data Source: 
+# 
+#     USDA (warehouse output prices paid to farmers)
+# 
+#     https://www.ams.usda.gov/market-news/fruits-vegetables
+
+# %%
+from IPython.display import Image
+Image("../../data/01_raw/prices/website_usda.png")
+
+# %% [markdown]
+# ### Import scripts
+
+# %%
+def get_volumes_usda(crop,crop_abb):
+
+    ##  Function to get US volumes directly from from official USDA website  #
+
+    import sys
+    sys.path.insert(0, '../../src')
+    sys.path.append('../../src/d00_utils')
+    sys.path.append('../../src/d01_data')
+    sys.path.append('../../src/d02_processing')
+    sys.path.append('../../src/d03_modelling')
+    import transformations as transf
+    import config
+    import pandas as pd
+    from datetime import date, datetime, timedelta
+    import numpy as np
+    import pyodbc
+
+    # Setting dates
+    # Date from
+    fdate = datetime.today() - timedelta(days=config.ndays)
+    fday = fdate.strftime('%d')
+    fmonth = fdate.strftime('%m')
+    fyear = fdate.strftime('%Y')
+
+    # Date to : current date data to collect updated information
+    tday = date.today().strftime('%d')
+    tmonth = date.today().strftime('%m')
+    tyear = date.today().strftime('%Y')
+
+    # URL for accessing quantities
+    USquantity =f"https://www.marketnews.usda.gov/mnp/fv-report-top-filters?&commAbr={crop_abb}&varName=&locAbr=&repType=movementDaily&navType=byComm&locName=&navClass=&navClass=&type=movement&dr=1&volume=&commName={crop}&portal=fv&region=&repDate={fmonth}%2F{fday}%2F{fyear}&endDate={tmonth}%2F{tday}%2F{tyear}&format=excel&rebuild=false"
+        
+    
+    # Assign the table data in html format to a Pandas dataframe
+    table =  pd.read_html(USquantity,header=0,parse_dates=['Date'])[0]
+
+    # Read the table in new dataframe with the main info
+    volumes = table[['Commodity Name',
+                    'Origin Name',
+                    'Type',
+                    'Package',
+                    'Date',
+                    'District',
+                    '10000lb units',
+                    'Trans Mode',
+                    'Season',
+                    'Import/Export']]
+
+    ########## Cleaning data ###########
+
+    # Delete rows if no volume available
+    volumes.dropna(axis='index',how='all',subset=['10000lb units'],inplace=True)
+
+    # New Category field based on type
+    volumes['Category'] = 'std ' + volumes['Type'].str.lower().str.strip()
+    volumes['Category'].fillna('std', inplace = True)
+    volumes["Import/Export"].fillna('internal', inplace = True)
+
+    # Convert 10K lb units to KG
+    volumes['Volume'] = volumes['10000lb units'] * 4535.9237
+
+    # Campaign dates
+    campaign_dates = volumes.groupby('Season')['Date'].agg('min').reset_index()
+    campaign_dates.columns = ['Season','First Date']
+    volumes = pd.merge(left=volumes, right=campaign_dates, how='left', left_on='Season', right_on='Season')
+    volumes['Week_num_campaign'] = np.ceil((volumes['Date'] - volumes['First Date']).dt.days.astype('int16')/7).astype(int)
+    volumes['Week_num_campaign'] = volumes['Week_num_campaign'].apply(lambda x: x + 1 if x == 0 else x)
+
+    # Informative fields
+    volumes['Crop']=crop
+    volumes['Country']='US'
+    volumes['Measure']='KG'
+
+    # Same package naming as prices
+    volumes['Package'].replace({'CTNS 8 18-OZ CNTRS W/LID' : 'cartons 8 18-oz containers with lids', 'FLTS 12 6-OZ CUPS W/LIDS' : 'flats 12 6-oz cups with lids'}, inplace=True)
+
+    # Formatting
+    volumes['Crop'] = volumes['Crop'].astype('str')
+    volumes['Country'] = volumes['Country'].astype('str')
+    volumes['District'] = volumes['District'].astype('str')
+    volumes["Import/Export"] = volumes["Import/Export"].astype('str')
+    volumes['Origin Name'] = volumes['Origin Name'].astype('str')
+    volumes['Category'] = volumes['Category'].astype('str')
+    volumes['Package'] = volumes['Package'].astype('str')
+    volumes['Trans Mode'] = volumes['Trans Mode'].astype('str')
+
+    # Naming of Region and Trade Countries
+    volumes['District'] = volumes['District'].apply(lambda x : transf.label_region_volumes(x))
+    volumes['Origin Name'] = volumes['Origin Name'].apply(lambda x : transf.label_trade_countries(x))
+
+    # Taking only relevant columns
+    volumes = volumes[['Crop', 'Country', 'District', 'Import/Export', 'Origin Name', 'Category', 'Package', 'Trans Mode', 'Season','Week_num_campaign','Date','Measure','Volume']]
+    volumes.rename(columns={'Crop' : 'Product', 'Country' : 'Country', 'District' : 'Region', 'Import/Export' : 'Trade_Type', 'Origin Name' : 'Trade_country', 'Category' : 'Category', 'Package' : 'Package', 'Trans Mode' : 'Transport', 'Season' : 'Campaign', 'Week_num_campaign' : 'Campaign_wk', 'Date' : 'Date_ref', 'Measure' : 'Measure','Volume' : 'Volume'},errors="raise",inplace=True)
+
+    return volumes
+
+# %% [markdown]
+# ### Common scripts
 
 # %%
 def load_volumes_bbdd(df_volumes):
@@ -381,30 +487,39 @@ def load_volumes_bbdd(df_volumes):
     sys.path.append('../../src/d02_processing')
     sys.path.append('../../src/d03_modelling')
     import transformations as transf
+    import config
     import pyodbc
     from datetime import datetime, timedelta
+    import re
+
+    ctry = re.sub('[^A-Za-z0-9]+', "','", str(df_volumes.Country.unique()))[2:-2]
+    crop = re.sub('[^A-Za-z0-9]+', "','", str(df_volumes.Product.unique()))[2:-2]
 
     connStr = pyodbc.connect('DRIVER={ODBC Driver 13 for SQL Server};SERVER=bipro02\\adminbi;DATABASE=Prices;Trusted_Connection=yes')
     cursor = connStr.cursor()
 
-    # Delete all data with volumes dates greater than the ndays parameter last days from today
-    N = 60 
-    rep_date = datetime.now().date() - timedelta(days=N)
-    qry_delete = f"DELETE FROM [Prices].[dbo].[volumes] where cast([Country] as nvarchar) = cast('EU' as nvarchar) and Date_volume > '{rep_date}'"
+    # Setting dates
+    # Date from
+    fdate = datetime.today() - timedelta(days=config.ndays)
+
+    # Delete all data with price dates greater than the ndays parameter last days from today
+# Delete all data with price dates greater than the ndays parameter last days from today
+    qry_delete = f"DELETE FROM [Prices].[dbo].[volumes] where [Country] = {ctry} and [Product] IN ({crop}) and Date_volume > '{fdate}'"
     cursor.execute(qry_delete)
+    connStr.commit()
 
     # Load all data with volumes dates greater than the ndays parameter last days from today
     upd = 0
 
     try:
         for index,row in df_volumes.iterrows():
-            if row['Date_ref'] > rep_date: # Python volumes line date must be greater than the max date in SQL table
-                cursor.execute("INSERT INTO dbo.volumes([Product],[Country],[Region],[Trade_Type],[Trade_Country],[Category],[Package],[Transport],[Campaign],[Campaign_wk],[Date_volume],[Measure],[Volume],[Updated]) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?)",row['Product'],row['Country'],row['Region'],row['Trade_Type'],transf.label_trade_countries(row['Trade_country']),row['Category'],row['Package'],row['Transport'],row['Year'],row['Week_num'],row['Date_ref'],row['Measure'],row['Volume'],datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+            if row['Date_ref'] > fdate: # Python volumes line date must be greater than the max date in SQL table
+                cursor.execute("INSERT INTO dbo.volumes([Product],[Country],[Region],[Trade_Type],[Trade_Country],[Category],[Package],[Transport],[Campaign],[Campaign_wk],[Date_volume],[Measure],[Volume],[Updated]) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?)",row['Product'],row['Country'],row['Region'],row['Trade_Type'],transf.label_trade_countries(row['Trade_country']),row['Category'],row['Package'],row['Transport'],row['Campaign'],row['Campaign_wk'],row['Date_ref'],row['Measure'],row['Volume'],datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
                 connStr.commit()
                 upd += 1
     except TypeError: # If there volume is null no posibility to compare operands
         for index,row in df_volumes.iterrows(): # When there are no volumes in SQL
-            cursor.execute("INSERT INTO dbo.volumes([Product],[Country],[Region],[Trade_Type],[Trade_Country],[Category],[Package],[Transport],[Campaign],[Campaign_wk],[Date_volume],[Measure],[Volume],[Updated]) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?)",row['Product'],row['Country'],row['Region'],row['Trade_Type'],transf.label_trade_countries(row['Trade_country']),row['Category'],row['Package'],row['Transport'],row['Year'],row['Week_num'],row['Date_ref'],row['Measure'],row['Volume'],datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+            cursor.execute("INSERT INTO dbo.volumes([Product],[Country],[Region],[Trade_Type],[Trade_Country],[Category],[Package],[Transport],[Campaign],[Campaign_wk],[Date_volume],[Measure],[Volume],[Updated]) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?)",row['Product'],row['Country'],row['Region'],row['Trade_Type'],transf.label_trade_countries(row['Trade_country']),row['Category'],row['Package'],row['Transport'],row['Campaign'],row['Campaign_wk'],row['Date_ref'],row['Measure'],row['Volume'],datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
             connStr.commit()
             upd += 1
     print(upd," new volumes added")
