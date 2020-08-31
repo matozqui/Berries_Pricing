@@ -1,6 +1,49 @@
 # To add a new cell, type '# %%'
 # To add a new markdown cell, type '# %% [markdown]'
 # %%
+def get_prices_new(crop,ctry,trade_ctry,ctgr):
+
+    ##  Function to get prices available    ##
+    import sys
+    sys.path.insert(0, '../../src')
+    sys.path.append('../../src/d00_utils')
+    sys.path.append('../../src/d01_data')
+    sys.path.append('../../src/d02_processing')
+    sys.path.append('../../src/d03_modelling')
+    import transformations as transf
+    import extractions as extract
+    import config
+    import pandas as pd
+    import pyodbc
+
+    connStr = pyodbc.connect(config.db_con)
+    cursor = connStr.cursor()
+
+    qry = f"SELECT [Product],[Country],[Trade_Country],[Category],[Date_price],[Campaign],AVG([Price]) as [Price] FROM [Prices].[dbo].[prices] WHERE [Product] = '{crop}' AND [Country] = '{ctry}' AND [Trade_Country] = '{trade_ctry}' AND [Category] = '{ctgr}' GROUP BY [Product],[Country],[Trade_Country],[Category],[Date_price],[Campaign]"
+    df_prices = pd.read_sql(qry, connStr)
+
+    return df_prices
+
+
+# %%
+def get_prices_interpolated_new(crop,ctry,trade_ctry,ctgr):
+    
+    ##  Function to get all prices interpolated weekly and mean, removing the first campaign available  ##
+
+    df_prices = get_prices_new(crop,ctry,trade_ctry,ctgr)
+    df_prices = df_prices[df_prices.Campaign > min(df_prices.Campaign)][['Date_price', 'Price']]
+    df_prices.set_index('Date_price',inplace=True)
+    df_prices.sort_index(inplace=True)
+    df_prices.index = df_prices.index.astype('datetime64[ns]') 
+    df_prices = df_prices.resample('W-MON').mean()
+    rows_null = df_prices.isnull()
+    idx_null = rows_null[rows_null.any(axis=1)].index
+    df_prices_all = df_prices.interpolate()
+
+    return df_prices_all
+
+
+# %%
 def get_prices(crop,ctry):
 
     ##  Function to get prices available    ##
