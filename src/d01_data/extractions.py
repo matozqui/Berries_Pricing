@@ -1,7 +1,7 @@
 # To add a new cell, type '# %%'
 # To add a new markdown cell, type '# %% [markdown]'
 # %%
-def get_prices_new(crop,ctry,trade_ctry,ctgr):
+def get_prices(crop,ctry,trade_ctry,ctgr):
 
     ##  Function to get prices available    ##
     import sys
@@ -26,11 +26,11 @@ def get_prices_new(crop,ctry,trade_ctry,ctgr):
 
 
 # %%
-def get_prices_interpolated_new(crop,ctry,trade_ctry,ctgr):
+def get_prices_interpolated(crop,ctry,trade_ctry,ctgr):
     
     ##  Function to get all prices interpolated weekly and mean, removing the first campaign available  ##
 
-    df_prices = get_prices_new(crop,ctry,trade_ctry,ctgr)
+    df_prices = get_prices(crop,ctry,trade_ctry,ctgr)
     df_prices = df_prices[df_prices.Campaign > min(df_prices.Campaign)][['Date_price', 'Price']]
     df_prices.set_index('Date_price',inplace=True)
     df_prices.sort_index(inplace=True)
@@ -44,48 +44,13 @@ def get_prices_interpolated_new(crop,ctry,trade_ctry,ctgr):
 
 
 # %%
-def get_prices(crop,ctry):
-
-    ##  Function to get prices available    ##
-
-    import pandas as pd
-    import pyodbc
-
-    connStr = pyodbc.connect('DRIVER={ODBC Driver 13 for SQL Server};SERVER=bipro02\\adminbi;DATABASE=Prices;Trusted_Connection=yes')
-    cursor = connStr.cursor()
-
-    qry = f"SELECT * FROM [Prices].[dbo].[prices] where cast([Country] as nvarchar) = cast('{ctry}' as nvarchar) and cast([Product] as nvarchar) = cast('{crop}' as nvarchar)"
-    df_prices = pd.read_sql(qry, connStr)
-
-    return df_prices
-
-
-# %%
-def get_prices_interpolated(crop,ctry):
-    
-    ##  Function to get all prices interpolated weekly and mean, removing the first campaign available  ##
-
-    df_prices = get_prices(crop,ctry)
-    df_prices = df_prices[df_prices.Campaign > min(df_prices.Campaign)][['Date_price', 'Price']]
-    df_prices.set_index('Date_price',inplace=True)
-    df_prices.sort_index(inplace=True)
-    df_prices.index = df_prices.index.astype('datetime64[ns]') 
-    df_prices = df_prices.resample('W-MON').mean()
-    rows_null = df_prices.isnull()
-    idx_null = rows_null[rows_null.any(axis=1)].index
-    df_prices_all = df_prices.interpolate()
-
-    return df_prices_all
-
-
-# %%
-def get_null_prices(crop,ctry):
+def get_null_prices(crop,ctry,trade_ctry,ctgr):
     
     ##  Function to get weeks without prices informed -no campaign period-  ##
 
     import pandas as pd
 
-    df_prices = get_prices(crop,ctry)
+    df_prices = get_prices(crop,ctry,trade_ctry,ctgr)
     df_prices = df_prices[df_prices.Campaign > min(df_prices.Campaign)][['Date_price', 'Price']]
     df_prices.set_index('Date_price',inplace=True)
     df_prices.sort_index(inplace=True)

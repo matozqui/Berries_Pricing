@@ -4,7 +4,7 @@
 # # Modeling
 
 # %%
-def get_prediction(ctry,crop,regn,catg,pkge,crcy,msre,mdel,start,end):
+def get_prediction(ctry,crop,trade_ctry,regn,ctgr,pkge,crcy,msre,mdel,start,end):
 
     ##  Function to call a model and make price predictions   ##
 
@@ -37,15 +37,18 @@ def get_prediction(ctry,crop,regn,catg,pkge,crcy,msre,mdel,start,end):
     from statsmodels.tsa.arima_model import ARIMAResults
     from datetime import datetime, timedelta
 
-    df_prices = extract.get_prices_interpolated(crop,ctry)
-    dfNullID = extract.get_null_prices(crop,ctry)
+    df_prices = extract.get_prices_interpolated(crop,ctry,trade_ctry,ctgr)
+    dfNullID = extract.get_null_prices(crop,ctry,trade_ctry,ctgr)
     df_prices_non_zero = df_prices[~df_prices.index.isin(dfNullID.set_index('Date_price').index)]
 
     # load model
     ctry_lc = ctry.lower()
     crop_lc = crop.lower()
     mdel_lc = mdel.lower()
-    model_name = f'../../data/04_models/model_{mdel_lc}_{crop_lc}_{ctry_lc}.pkl'
+    tctr_lc = trade_ctry.lower()
+    ctgr_lc = ctgr.lower()
+
+    model_name = f'../../data/04_models/model_{mdel_lc}_{crop_lc}_{ctry_lc}_{tctr_lc}_{ctgr_lc}.pkl'
     ld_model = ARIMAResults.load(model_name)
 
     # make predictions for last year and the following
@@ -71,7 +74,7 @@ def get_prediction(ctry,crop,regn,catg,pkge,crcy,msre,mdel,start,end):
 
 
 # %%
-def load_predictions_db(df_price_model,ctry,crop,regn,catg,pkge,crcy,msre,mdel):
+def load_predictions_db(df_price_model,ctry,crop,trade_ctry,regn,ctgr,pkge,crcy,msre,mdel):
 
     ##  Function to upload prices estimated into SQL Server Database   #
 
@@ -113,7 +116,7 @@ def load_predictions_db(df_price_model,ctry,crop,regn,catg,pkge,crcy,msre,mdel):
 
     # Delete all prices predicted which are being predicted (greater than the minimum prediction date) for the country and crop
     min_pred_date = min(df_price_model[df_price_model.Price_estimated != 0].Date_ref).date()#.strftime("%Y-%m-%d")
-    qry_delete = f"DELETE FROM [Prices].[dbo].[prices_prediction] where [Country] = '{ctry}' and [Product]='{crop}' and [Date_price] >= '{min_pred_date}'"
+    qry_delete = f"DELETE FROM [Prices].[dbo].[prices_prediction] where [Country] = '{ctry}' and [Product]='{crop}' and [Trade_Country]='{trade_ctry}' and [Category]='{ctgr}' and [Date_price] >= '{min_pred_date}'"
     cursor.execute(qry_delete)
 
     # Load all data with price dates greater than the N last days from today
@@ -130,7 +133,7 @@ def load_predictions_db(df_price_model,ctry,crop,regn,catg,pkge,crcy,msre,mdel):
         else: 
             price_real = row['Price']
         if row['Date_ref'] >= min_pred_date:
-            cursor.execute("INSERT INTO dbo.prices_prediction([Product],[Country],[Region],[Category],[Package],[Date_price],[Currency],[Measure],[Model],[Price],[Price_estimated],[Updated]) values (?,?,?,?,?,?,?,?,?,?,?,?)",crop,ctry,regn,catg,pkge,row['Date_ref'],crcy,msre,mdel,row['Price'],row['Price_estimated'],datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+            cursor.execute("INSERT INTO dbo.prices_prediction([Product],[Country],[Trade_Country],[Region],[Category],[Package],[Date_price],[Currency],[Measure],[Model],[Price],[Price_estimated],[Updated]) values (?,?,?,?,?,?,?,?,?,?,?,?,?)",crop,ctry,trade_ctry,regn,ctgr,pkge,row['Date_ref'],crcy,msre,mdel,row['Price'],row['Price_estimated'],datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
             connStr.commit()
             upd += 1
 

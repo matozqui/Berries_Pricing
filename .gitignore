@@ -1,6 +1,6 @@
-data/04_models/model_arima_blueberries_es.pkl
-data/04_models/model_arima_blueberries_es_copy.pkl
-data/04_models/model_arima_raspberries_es.pkl
-data/04_models/model_arima_strawberries_es.pkl
-data/04_models/model_sarimax_blueberries_es.pkl
+data/04_models/model_arima_strawberries_es_es_std.pkl
+data/04_models/model_arima_raspberries_es_es_std.pkl
+data/04_models/model_arima_blueberries_es_es_std.pkl
+data/04_models/model_sarimax_blueberries_es_es_std.pkl
+data/04_models/data/04_models/model_arima_raspberries_us_mx_std.pkl
 data/04_models/*

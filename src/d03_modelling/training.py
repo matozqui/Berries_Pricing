@@ -86,10 +86,19 @@ def evaluate_models(dataset, p_values, d_values, q_values, crop, ctry, dfNullID)
 
 
 # %%
-def train_arima_model(crop,ctry):
+def train_arima_model(crop,ctry,trade_ctry,ctgr):
 
     ##  Function to train a ARIMA model and save it as a pickle .pkl file ## 
 
+    import sys
+    sys.path.insert(0, '../../src')
+    sys.path.append('../../src/d00_utils')
+    sys.path.append('../../src/d01_data')
+    sys.path.append('../../src/d02_processing')
+    sys.path.append('../../src/d03_modelling')
+    import transformations as transf
+    import extractions as extract
+    import config
     from statsmodels.tsa.statespace.sarimax import SARIMAX
     from sklearn.metrics import mean_squared_error
     from sklearn.metrics import mean_absolute_error
@@ -110,33 +119,18 @@ def train_arima_model(crop,ctry):
 
     crop_lc = crop.lower()
     ctry_lc = ctry.lower()
+    tctr_lc = trade_ctry.lower()
+    ctgr_lc = ctgr.lower()
 
-    connStr = pyodbc.connect('DRIVER={ODBC Driver 13 for SQL Server};SERVER=bipro02\\adminbi;DATABASE=Prices;Trusted_Connection=yes')
-    cursor = connStr.cursor()
+    # Get prices interpolated
+    df_prices = extract.get_prices_interpolated(crop,ctry,trade_ctry,ctgr)
 
-    qry = f"SELECT * FROM [Prices].[dbo].[prices] where cast([Country] as nvarchar) = cast('{ctry}' as nvarchar) and cast([Product] as nvarchar) = cast('{crop}' as nvarchar)"
-    df_prices = pd.read_sql(qry, connStr)
-
-    df_prices = df_prices[df_prices.Campaign > min(df_prices.Campaign)][['Date_price', 'Price']]
-    df_prices.set_index('Date_price',inplace=True)
-    df_prices.sort_index(inplace=True)
-    df_prices.index = df_prices.index.astype('datetime64[ns]') 
-    df_prices = df_prices.resample('W-MON').mean()
-    rows_null = df_prices.isnull()
-    idx_null = rows_null[rows_null.any(axis=1)].index
-    df_prices_all = df_prices.interpolate()
-    df_prices_non_zero = df_prices_all[~df_prices_all.index.isin(idx_null)]
-    listIndex = list(zip(df_prices_all.index, range(0,len(df_prices_all))))     # save all indexes in tuples list (index, idPosition)
-    listNull = idx_null     # save all null indexes
-
-    dfIndex = pd.DataFrame(listIndex)
-    dfNull = pd.DataFrame(listNull)
-    dfIndex.columns = ['Date_price','ID']
-    dfNullID = dfIndex.merge(dfNull, how='inner', on='Date_price')    # this dataframe contains the null indexes with their original index id
+    # Save null indexes with their original index id
+    dfNullID = extract.get_null_prices(crop,ctry,trade_ctry,ctgr)
 
     ### Our data is weekly based and the exploratory analysis has shown us that there is a clear seasonality. 
     ### So let's set up seasonal_order parameter to see if we improve the estimation and for train data (all observations except the last year)
-    df_prices_all_train, df_prices_all_test =         train_test_split(df_prices_all, shuffle=False, test_size=len(df_prices_all[df_prices_all.index.year==max(df_prices_all.index.year)]))
+    df_prices_train, df_prices_test =         train_test_split(df_prices, shuffle=False, test_size=len(df_prices[df_prices.index.year==max(df_prices.index.year)]))
 
     
     # Evaluate parameters
@@ -149,10 +143,10 @@ def train_arima_model(crop,ctry):
     warnings.filterwarnings("ignore")
 
     # Get the best ARIMA model
-    best_model = evaluate_models(df_prices_all_train.values, p_values, d_values, q_values, crop, ctry, dfNullID)
+    best_model = evaluate_models(df_prices_train.values, p_values, d_values, q_values, crop, ctry, dfNullID)
 
     # Generate model!
-    model = SARIMAX(df_prices_all_train, order = best_model, seasonal_order=(1, 1, 1, 52)).fit()
+    model = SARIMAX(df_prices_train, order = best_model, seasonal_order=(1, 1, 1, 52)).fit()
 
     # Monkey patch around bug in ARIMA class
     def __getnewargs__(self):
@@ -160,7 +154,7 @@ def train_arima_model(crop,ctry):
     ARIMA.__getnewargs__ = __getnewargs__
 
     # Save model as a pickle, .pkl file
-    model.save(f'../../data/04_models/model_arima_{crop_lc}_{ctry_lc}.pkl')
+    model.save(f'../../data/04_models/model_arima_{crop_lc}_{ctry_lc}_{tctr_lc}_{ctgr_lc}.pkl')
 
     # Save model summary as an independent file		
     plt.rc('figure', figsize=(12, 7))
@@ -168,7 +162,7 @@ def train_arima_model(crop,ctry):
     plt.axis('off')
     plt.tight_layout()
     updated = datetime.now().strftime("%Y%m%d_%H%M%S")
-    dir_img = f'../../data/04_models/Summary_ARIMA_{crop_lc}_{ctry_lc}_{updated}.png'
+    dir_img = f'../../data/04_models/Summary_ARIMA_{crop_lc}_{ctry_lc}_{tctr_lc}_{ctgr_lc}_{updated}.png'
     plt.savefig(dir_img)
 
 
@@ -268,7 +262,7 @@ def evaluate_xmodels(dataset, exog, p_values, d_values, q_values, crop, ctry, df
 
 
 # %%
-def train_sarimax_model(crop,ctry,trade_ctry):
+def train_sarimax_model(crop,ctry,trade_ctry,ctgr):
 
     ##  Function to train a SARIMAX model and save it as a pickle .pkl file ## 
 
@@ -295,9 +289,11 @@ def train_sarimax_model(crop,ctry,trade_ctry):
 
     crop_lc = crop.lower()
     ctry_lc = ctry.lower()
+    tctr_lc = trade_ctry.lower()
+    ctgr_lc = ctgr.lower()
 
-    endog = extract.get_prices_interpolated(crop,ctry)  # this dataframe contains all prices interpolated weekly and mean
-    dfNullID = extract.get_null_prices(crop,ctry)   # this dataframe contains the null indexes with their original index id
+    endog = extract.get_prices_interpolated(crop,ctry,trade_ctry,ctgr)  # this dataframe contains all prices interpolated weekly and mean
+    dfNullID = extract.get_null_prices(crop,ctry,trade_ctry,ctgr)   # this dataframe contains the null indexes with their original index id
 
     # Obtaining exogenous features for SARIMAX model
 
@@ -347,7 +343,7 @@ def train_sarimax_model(crop,ctry,trade_ctry):
     ARIMA.__getnewargs__ = __getnewargs__
 
     # Save model as a pickle, .pkl file
-    model.save(f'../../data/04_models/model_sarimax_{crop_lc}_{ctry_lc}.pkl')
+    model.save(f'../../data/04_models/model_sarimax_{crop_lc}_{ctry_lc}_{tctr_lc}_{ctgr_lc}.pkl')
 
     # Save model summary as an independent file		
     plt.rc('figure', figsize=(12, 7))
@@ -355,7 +351,7 @@ def train_sarimax_model(crop,ctry,trade_ctry):
     plt.axis('off')
     plt.tight_layout()
     updated = datetime.now().strftime("%Y%m%d_%H%M%S")
-    dir_img = f'../../data/04_models/Summary_SARIMAX_{crop_lc}_{ctry_lc}_{updated}.png'
+    dir_img = f'../../data/04_models/Summary_SARIMAX_{crop_lc}_{ctry_lc}_{tctr_lc}_{ctgr_lc}_{updated}.png'
     plt.savefig(dir_img)
 
 
