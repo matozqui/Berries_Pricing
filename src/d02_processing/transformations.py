@@ -463,3 +463,95 @@ def label_region_volumes(row):
     return switcher.get(row, "nan")
 
 
+# %%
+def get_prices_volumes(ctry,crop,trade_ctry,ctgr):
+
+    #   Function to combine prices and volumes in one dataframe #
+
+    import sys
+    sys.path.insert(0, '../../src')
+    sys.path.append('../../src/d01_data')
+    sys.path.append('../../src/d02_processing')
+    sys.path.append('../../src/d03_modelling')
+
+    import extractions as extract
+    import transformations as transf
+    import training as train
+    import import_data as imp
+    import inference as inf
+    import datetime
+
+    df_prices = extract.get_prices(crop, ctry, trade_ctry, ctgr)
+    df_prices.set_index('Date_price',inplace=True)
+
+    df_volumes = extract.get_volumes(crop, ctry, trade_ctry)
+
+    df_volumes_prices = df_volumes.join(df_prices,how='outer')
+    df_volumes_prices.Volume.fillna(value=0, inplace=True)
+    df_volumes_prices.fillna(method='pad', inplace=True)
+
+    # First date with price
+    first_date = max(df_volumes_prices[(df_volumes_prices.Price).isnull()].index) + datetime.timedelta(days=1)
+
+    df_volumes_prices.drop(df_volumes_prices[df_volumes_prices.index < first_date].index, inplace=True)
+    df_volumes_prices.reset_index(inplace=True)
+    df_volumes_prices.rename(columns={'index' : 'Date_ref'},errors="raise",inplace=True)
+
+    return df_volumes_prices
+
+
+# %%
+def load_volumes_prices_bbdd(df_volumes_prices):
+
+    ##  Function to upload the combination of prices and volumes retrieved from different sources to SQL Server Database   #
+
+    import sys
+    sys.path.insert(0, '../../src')
+    sys.path.append('../../src/d00_utils')
+    sys.path.append('../../src/d01_data')
+    sys.path.append('../../src/d02_processing')
+    sys.path.append('../../src/d03_modelling')
+    import transformations as transf
+    import config
+    import pandas as pd
+    from datetime import date, datetime, timedelta
+    import numpy as np
+    import pyodbc
+    import stringing as st
+
+    ctry = st.get_comma_values(df_volumes_prices.Country)
+    crop = st.get_comma_values(df_volumes_prices.Product)
+    trade_ctry = st.get_comma_values(df_volumes_prices.Trade_Country)
+    ctgr = st.get_comma_values(df_volumes_prices.Category)
+
+    connStr = pyodbc.connect(config.db_con)
+    cursor = connStr.cursor()
+
+    # Setting dates
+    # Date from
+    fdate = datetime.today() - timedelta(days=config.ndays)
+
+    # Delete all data with price dates greater than the ndays parameter last days from today
+# Delete all data with price dates greater than the ndays parameter last days from today
+    qry_delete = f"DELETE FROM [Prices].[dbo].[volumes_prices] where [Country] = {ctry} and [Product] IN ({crop}) and [Trade_Country] = {trade_ctry} and [Category] = {ctgr} and Date_ref > '{fdate}'"
+    cursor.execute(qry_delete)
+    connStr.commit()
+
+    # Load all data with price dates greater than the ndays global parameter last days from today
+    upd = 0
+    try:
+        for index,row in df_volumes_prices.iterrows():
+            if row['Date_ref'] > fdate: # Python price line date must be greater than the max date in SQL table
+                cursor.execute("INSERT INTO [Prices].[dbo].[volumes_prices]([Product],[Country],[Trade_Country],[Category],[Campaign],[Campaign_wk],[Date_ref],[Currency],[Measure],[Price],[Volume],[Updated]) values (?,?,?,?,?,?,?,?,?,?,?,?)",row['Product'],row['Country'],row['Trade_Country'],row['Category'],row['Campaign'],'',row['Date_ref'],'USD','KG',row['Price'],row['Volume'],datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+                connStr.commit()
+                upd += 1
+    except TypeError: # If there price is null no posibility to compare operands
+        for index,row in df_volumes_prices.iterrows(): # When there are no prices in SQL
+            cursor.execute("INSERT INTO [Prices].[dbo].[volumes_prices]([Product],[Country],[Trade_Country],[Category],[Campaign],[Campaign_wk],[Date_ref],[Currency],[Measure],[Price],[Volume],[Updated]) values (?,?,?,?,?,?,?,?,?,?,?,?)",row['Product'],row['Country'],row['Trade_Country'],row['Category'],row['Campaign'],'',row['Date_ref'],'USD','KG',row['Price'],row['Volume'],datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+            connStr.commit()
+            upd += 1
+    cursor.close()
+    connStr.close()
+    print(upd," new prices added")
+
+

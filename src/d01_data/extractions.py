@@ -135,3 +135,46 @@ def get_labour():
     return df_salaries
 
 
+# %%
+def get_prices_state(crop,ctry,trade_ctry,ctgr):
+
+    ##  Function to get prices available    ##
+    import sys
+    sys.path.insert(0, '../../src')
+    sys.path.append('../../src/d00_utils')
+    sys.path.append('../../src/d01_data')
+    sys.path.append('../../src/d02_processing')
+    sys.path.append('../../src/d03_modelling')
+    import transformations as transf
+    import extractions as extract
+    import config
+    import pandas as pd
+    import pyodbc
+
+    connStr = pyodbc.connect(config.db_con)
+    cursor = connStr.cursor()
+
+    qry = f"select reg.[State], prices.[Product],prices.[Country],prices.[Trade_Country],prices.[Category],prices.[Date_price],prices.[Campaign],AVG([Price]) as [Price] FROM [Prices].[dbo].[prices] left join [Prices].[dbo].[regions] reg on reg.Region = prices.Region and reg.Country = prices.Country WHERE [Product] = '{crop}' AND prices.[Country] = '{ctry}' AND prices.[Trade_Country] = '{trade_ctry}' AND prices.[Category] = '{ctgr}' GROUP BY reg.[State], prices.[Product],prices.[Country],prices.[Trade_Country],prices.[Category],prices.[Date_price],prices.[Campaign]"
+    df_prices = pd.read_sql(qry, connStr)
+
+    return df_prices
+
+
+# %%
+def get_volumes_state(crop,ctry,trade_ctry):
+
+    import pyodbc
+    import pandas as pd
+
+    ##  Function to get UE volumes import from Spain (Agronometrics), weekly aggregated ##
+    
+    connStr = pyodbc.connect('DRIVER={ODBC Driver 13 for SQL Server};SERVER=bipro02\\adminbi;DATABASE=Prices;Trusted_Connection=yes')
+    cursor = connStr.cursor()
+
+    qry = f"SELECT reg.[State], vols.[Product],vols.[Country],vols.[Trade_Country], vols.[Date_volume],vols.[Campaign],SUM([Volume]) as [Volume] FROM [Prices].[dbo].[volumes] vols left join [Prices].[dbo].[regions] reg on reg.Region = vols.Region and vols.Country = vols.Country where vols.[Country] = '{ctry}' and vols.[Product] = '{crop}' and vols.[Trade_Country] ='{trade_ctry}' group by reg.[State], vols.[Product],vols.[Country],vols.[Trade_Country], vols.[Date_volume],vols.[Campaign]"
+
+    df_volumes = pd.read_sql(qry, connStr)
+
+    return df_volumes
+
+

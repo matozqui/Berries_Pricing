@@ -247,10 +247,10 @@ def load_prices_bbdd(df_prices):
     from datetime import date, datetime, timedelta
     import numpy as np
     import pyodbc
-    import re
+    import stringing as st
 
-    ctry = re.sub('[^A-Za-z0-9]+', "','", str(df_prices.Country.unique()))[2:-2]
-    crop = re.sub('[^A-Za-z0-9]+', "','", str(df_prices.Product.unique()))[2:-2]
+    ctry = st.get_comma_values(df_volumes_prices.Country)
+    crop = st.get_comma_values(df_volumes_prices.Product)
 
     connStr = pyodbc.connect(config.db_con)
     cursor = connStr.cursor()

@@ -134,12 +134,10 @@ def train_arima_model(crop,ctry,trade_ctry,ctgr):
 
     
     # Evaluate parameters
-    #p_values = range(0, 10)
-    #d_values = range(0, 5)
-    #q_values = range(0, 5)
-    p_values = range(8, 9)
-    d_values = range(0, 1)
-    q_values = range(1, 2)
+    p_values = range(0, 10)
+    d_values = range(0, 5)
+    q_values = range(0, 5)
+
     warnings.filterwarnings("ignore")
 
     # Get the best ARIMA model
@@ -323,12 +321,10 @@ def train_sarimax_model(crop,ctry,trade_ctry,ctgr):
     exog_train_norm.columns = exog_train.columns.values
     
     # Evaluate parameters
-    #p_values = range(0, 10)
-    #d_values = range(0, 5)
-    #q_values = range(0, 5)
-    p_values = range(8, 9)
-    d_values = range(0, 1)
-    q_values = range(1, 2)
+    p_values = range(0, 10)
+    d_values = range(0, 5)
+    q_values = range(0, 5)
+
     warnings.filterwarnings("ignore")
 
     # Get the best SARIMAX model
