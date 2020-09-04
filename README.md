@@ -1,11 +1,11 @@
 # Berries market prices predictor
 ![berries frame](/docs/berries_frame.jpg)
 
-# [1_Introduction](#1_Introduction)
+* [1_Introduction](#1. Introduction)
 # 2_Directory_structure
 
 
-# 1_Introduction
+# 1. Introduction
 
 # 2_Directory_structure
 ```
