@@ -1,5 +1,5 @@
 # Berries_Pricing
-![berries pic](/docs/berries.jpg)
+
 Berries pricing data study
 
 Directory structure:
