@@ -1,9 +1,13 @@
 # Berries market prices predictor
 ![berries frame](/docs/berries_frame.jpg)
 
-**Introduction:**
+# [1_Introduction](#1_Introduction)
+# 2_Directory_structure
 
-**Directory structure:**
+
+# 1_Introduction
+
+# 2_Directory_structure
 ```
 ├── README.md          <- The top-level README for developers.
 ├── conf               <- Space for credentials
