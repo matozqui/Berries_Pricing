@@ -44,6 +44,10 @@ Structure based on [Data Science for Social Good](https://github.com/dssg/hitchh
 
 # 3_Raw_data
 
+| Attempt | #1 | #2 |
+| :---: | :---: | :---: |
+| Seconds | 301 | 283 |
+
 # 4_Methodology
 
 # 5_Architecture
