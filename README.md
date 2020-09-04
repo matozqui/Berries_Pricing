@@ -48,7 +48,7 @@ Structure based on [Data Science for Social Good](https://github.com/dssg/hitchh
 
 # 5_Architecture
 
-![arquitecture](/docs/arquitecture.JPG)
+![arquitecture](/docs/arquitecture.jpg)
 
 Design made with [Cloud Skew app](https://www.cloudskew.com/)
 
