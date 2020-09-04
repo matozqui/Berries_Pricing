@@ -1,5 +1,5 @@
 # Berries_Pricing
-![berries pic](/docs/berries_picture.jpg)
+![berries frame](/docs/berries_picture.jpg)
 
 Berries pricing data study
 
