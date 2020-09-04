@@ -1,9 +1,13 @@
 # Berries market prices predictor
 ![berries frame](/docs/berries_frame.jpg)
 
-* [1_Introduction](#1. Introduction)
-# 2_Directory_structure
-
+* [1_Introduction](#1_Introduction)
+* [2_Directory_structure](#2_Directory_structure)
+* [3_Raw_data](#3_Raw_data)
+* [4_Methodology](#4_Methodology)
+* [5_Architecture](#5_Architecture)
+* [6_Summary](#6_Summary)
+* [7_Conclusions](#7_Conclusions)
 
 # 1. Introduction
 
@@ -38,13 +42,14 @@
 
 I chose to follow the project structure laid out by the people at [Data Science for Social Good](https://github.com/dssg/hitchhikers-guide/blob/master/sources/curriculum/0_before_you_start/pipelines-and-project-workflow/README.md) with a slightly-modified schema.
 
-**Raw data description:**
+# 3_Raw_data
 
-**Methodology:**
+# 4_Methodology
 
-**Arquitecture:**
+# 5_Architecture
 
-**Summary:**
+# 6_Summary
 
-**Conclusions:**
+# 7_Conclusions
+
 
