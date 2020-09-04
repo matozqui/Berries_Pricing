@@ -1,4 +1,4 @@
-# Berries_Pricing
+# Berries market prices predictor
 ![berries frame](/docs/berries_frame.jpg)
 
 Berries pricing data study
