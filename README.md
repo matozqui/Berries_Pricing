@@ -1,10 +1,9 @@
 # Berries market prices predictor
 ![berries frame](/docs/berries_frame.jpg)
 
-Berries pricing data study
+**Introduction:**
 
-Directory structure:
-
+**Directory structure:**
 ```
 ├── README.md          <- The top-level README for developers.
 ├── conf               <- Space for credentials
@@ -34,3 +33,14 @@ Directory structure:
 ```
 
 I chose to follow the project structure laid out by the people at [Data Science for Social Good](https://github.com/dssg/hitchhikers-guide/blob/master/sources/curriculum/0_before_you_start/pipelines-and-project-workflow/README.md) with a slightly-modified schema.
+
+**Raw data description:**
+
+**Methodology:**
+
+**Arquitecture:**
+
+**Summary:**
+
+**Conclusions:**
+
