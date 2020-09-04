@@ -48,6 +48,8 @@ I chose to follow the project structure laid out by the people at [Data Science 
 
 # 5_Architecture
 
+![arquitecture](/docs/arquitecture.jpg)
+
 # 6_Summary
 
 # 7_Conclusions
