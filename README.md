@@ -40,7 +40,7 @@
 └── src                <- Source code for use in this project.
 ```
 
-I chose to follow the project structure laid out by the people at [Data Science for Social Good](https://github.com/dssg/hitchhikers-guide/blob/master/sources/curriculum/0_before_you_start/pipelines-and-project-workflow/README.md) with a slightly-modified schema.
+Structure based on [Data Science for Social Good](https://github.com/dssg/hitchhikers-guide/blob/master/sources/curriculum/0_before_you_start/pipelines-and-project-workflow/README.md) with a slightly-modified schema.
 
 # 3_Raw_data
 
@@ -49,6 +49,8 @@ I chose to follow the project structure laid out by the people at [Data Science 
 # 5_Architecture
 
 ![arquitecture](/docs/arquitecture.jpg)
+
+Design made with [Cloud Skew app](https://www.cloudskew.com/)
 
 # 6_Summary
 
