@@ -49,7 +49,7 @@ Structure based on [Data Science for Social Good](https://github.com/dssg/hitchh
 | USDA | Market prices | Market prices | US (84 regions) | URL | 10 years | 40000 |
 | USDA | Market volumes | Market volumes | US (24 regions) | URL | 20 years | 150000 |
 | Junta Andalucia | Market prices | Spain | .xls | Weekly | 4 years | 500 |
-| International Blueberry Organisation | Market volumes | Spain | .xls | Weekly | 5 years | 3000 |
+| Int. Blueberry Org. | Market volumes | Spain | .xls | Weekly | 5 years | 3000 |
 | Ministerio Agricultura | Labour Cost | Spain | Yearly | .xls | Yearly | 35 |
 
 # 4_Methodology
