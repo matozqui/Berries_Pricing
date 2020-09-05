@@ -61,7 +61,7 @@ def get_prediction(ctry,crop,trade_ctry,regn,ctgr,pkge,crcy,msre,mdel,exog,start
     yr = str(datetime.now().year+1)
 
     #pred = ld_model.get_prediction(start=start, end=end, dynamic=True)
-    if mdel == 'ARIMA':  
+    if mdel in ['ARIMA','SARIMA']:  
         pred = ld_model.get_prediction(start=start, end=end, dynamic=True)
         df_pred = pred.predicted_mean.to_frame(name='Price_estimated')
     elif mdel == 'SARIMAX': 
