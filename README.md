@@ -46,11 +46,11 @@ Structure based on [Data Science for Social Good](https://github.com/dssg/hitchh
 
 | Data Source | Data Kind | Geography | Format | Periodicity | History | Rows |
 | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| USDA | Market prices | Market prices | US (84 regions) | URL | 10 years | 40000 |
-| USDA | Market volumes | Market volumes | US (24 regions) | URL | 20 years | 150000 |
-| Junta Andalucia | Market prices | Spain | .xls | Weekly | 4 years | 500 |
+| USDA | Market prices | US (84 regions) | URL | Daily | 10 years | 40000 |
+| USDA | Market volumes | US (24 regions) | URL | Daily | 20 years | 150000 |
+| Junta de Andalucia | Market prices | Spain | .xls | Weekly | 4 years | 500 |
 | Int. Blueberry Org. | Market volumes | Spain | .xls | Weekly | 5 years | 3000 |
-| Ministerio Agricultura | Labour Cost | Spain | Yearly | .xls | Yearly | 35 |
+| Ministerio de Agricultura | Labour Cost | Spain | .xls | Yearly | 35 years | 35 |
 
 # 4_Methodology
 
