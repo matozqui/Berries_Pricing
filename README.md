@@ -5,6 +5,11 @@
 * [2_Directory_structure](#2_Directory_structure)
 * [3_Raw_data](#3_Raw_data)
 * [4_Methodology](#4_Methodology)
+  * [4_1_Ingestion](#4_1_Ingestion)
+  * [4_2_Cleaning](#4_2_Cleaning)
+  * [4_3_Exploration](#4_3_Exploration)
+  * [4_4_Modelling](#4_4_Modelling)
+  * [4_5_Visualize](#4_5_Visualize)  
 * [5_Architecture](#5_Architecture)
 * [6_Summary](#6_Summary)
 * [7_Conclusions](#7_Conclusions)
@@ -46,18 +51,48 @@ Structure based on [Data Science for Social Good](https://github.com/dssg/hitchh
 
 | Data Source | Data Kind | Geography | Format | Periodicity | History | Rows |
 | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| USDA | Market prices | Market prices | US (84 regions) | URL | 10 years | 40000 |
-| USDA | Market volumes | Market volumes | US (24 regions) | URL | 20 years | 150000 |
-| Junta Andalucia | Market prices | Spain | .xls | Weekly | 4 years | 500 |
+| USDA | Market prices | US (84 regions) | URL | Daily | 10 years | 40000 |
+| USDA | Market volumes | US (24 regions) | URL | Daily | 20 years | 150000 |
+| Junta de Andalucia | Market prices | Spain | .xls | Weekly | 4 years | 500 |
 | Int. Blueberry Org. | Market volumes | Spain | .xls | Weekly | 5 years | 3000 |
-| Ministerio Agricultura | Labour Cost | Spain | Yearly | .xls | Yearly | 35 |
+| Ministerio de Agricultura | Labour Cost | Spain | .xls | Yearly | 35 years | 35 |
 
 # 4_Methodology
+
+During the project different technologies, techniques and analytical methods have been used trying to fit-to-purpose of each step.
+
+### 4_1_Ingestion
+
+Data is collected using web scrapping techniques (US data) and pandas excel import feature (Spanish data). Then is stored in an SQL Server database which consolidates all data in one repository.
+
+### 4_2_Cleaning
+
+Data cleaning and transformation includes descriptive tags homogenizing, format conversions to kilogrames, geolocation, measures grouping, resampling, merging, interpolating, type transformations.
+One of the main issues is handling non-campaign periods in which there are not prices (target variable to predict.) To handle it data is interpolated to train models but omitted when validating and predicting.
+
+### 4_3_Exploration
+
+To better understand the nature of data a series of analysis are carried out:
+* Series evolution line charts grouped by year to understand trend and seasonality
+* Yearly-wise and weekly-wise boxplots to understand trend and seasonality respectively
+* Autocorrelation function (ACF) to find correlations of present time points with lags
+* Partially autocorrelation function (PACF) to find correlation of the residuals
+
+### 4_4_Modelling
+
+Models used in the project are the following:
+* **ARIMA**: autoregression model based on the idea that time points of time series data can impact current and future time points.
+* **SARIMA**: improved ARIMA with a seasonal component that usually fits well on seasonal data.
+* **SARIMAX**: it is a model based on SARIMA and introduces exogenous variables in the model which needs to be fitted in the same training, testing and forecasting date index and shape as the endogenous variables.
+
+### 4_5_Visualize
+
+A [Microsoft® SQL Analysis Services](https://docs.microsoft.com/es-es/analysis-services/ssas-overview?view=asallproducts-allversions) model includes all cleaned data from external sources and predicted data resulting from the inference of the models. 
+Then a series of [Power BI]([https://powerbi.microsoft.com/es-es/]) dashboards connected to this model make possible to check all this data.
 
 # 5_Architecture
 
 ![arquitecture](/docs/arquitecture.jpg)
-
 Design made with [Cloud Skew app](https://www.cloudskew.com/)
 
 # 6_Summary
