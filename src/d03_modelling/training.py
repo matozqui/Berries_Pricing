@@ -249,9 +249,9 @@ def evaluate_xmodels(dataset, exog, p_values, d_values, q_values, crop, ctry, df
 					print('ARIMA%s MAE=%.3f' % (order,mae))
 				except:
 					continue
-	print('Best ARIMA%s MAE=%.3f' % (best_cfg, best_score))
+	print('Best SARIMAX%s MAE=%.3f' % (best_cfg, best_score))
 	versions_file = '../../data/04_models/Model_versions.txt'
-	model_data = 'Best ARIMA%s // MAE=%.3f // ' % (best_cfg, best_score)
+	model_data = 'Best SARIMAX%s // MAE=%.3f // ' % (best_cfg, best_score)
 	updated = datetime.now().strftime("%Y%m%d_%H%M%S")
 	with open(versions_file, "a") as f:
 		f.write("##"+crop+" "+ctry+" // "+model_data+"Updated "+updated+"##\n")
@@ -260,7 +260,7 @@ def evaluate_xmodels(dataset, exog, p_values, d_values, q_values, crop, ctry, df
 
 
 # %%
-def train_sarimax_model(crop,ctry,trade_ctry,ctgr):
+def train_sarimax_model(crop,ctry,trade_ctry,ctgr,exog):
 
     ##  Function to train a SARIMAX model and save it as a pickle .pkl file ## 
 
@@ -293,13 +293,8 @@ def train_sarimax_model(crop,ctry,trade_ctry,ctgr):
     endog = extract.get_prices_interpolated(crop,ctry,trade_ctry,ctgr)  # this dataframe contains all prices interpolated weekly and mean
     dfNullID = extract.get_null_prices(crop,ctry,trade_ctry,ctgr)   # this dataframe contains the null indexes with their original index id
 
-    # Obtaining exogenous features for SARIMAX model
-
-    df_volumes = extract.get_volumes(crop,trade_ctry,ctry)
-    df_salaries = extract.get_labour()
-
     # Save exogenous dataframe with same shape as endogenous dataset for getting best model
-    exog = endog.join(df_salaries.join(df_volumes).fillna(value=0)).drop('Price',axis=1)
+    exog = endog.join(exog.fillna(value=0)).fillna(value=0).drop('Price',axis=1)
 
     ### Data is weekly based and the exploratory analysis has shown that there is a clear seasonality between campaigns (years)
     ### So let's set up seasonal_order parameter to see if we improve the estimation and for train data (all observations except the last year)
@@ -349,5 +344,87 @@ def train_sarimax_model(crop,ctry,trade_ctry,ctgr):
     updated = datetime.now().strftime("%Y%m%d_%H%M%S")
     dir_img = f'../../data/04_models/Summary_SARIMAX_{crop_lc}_{ctry_lc}_{tctr_lc}_{ctgr_lc}_{updated}.png'
     plt.savefig(dir_img)
+
+
+# %%
+def train_arima_model_vols(crop,ctry,trade_ctry,ctgr):
+
+    ##  Function to train a ARIMA model and save it as a pickle .pkl file ## 
+
+    import sys
+    sys.path.insert(0, '../../src')
+    sys.path.append('../../src/d00_utils')
+    sys.path.append('../../src/d01_data')
+    sys.path.append('../../src/d02_processing')
+    sys.path.append('../../src/d03_modelling')
+    import transformations as transf
+    import extractions as extract
+    import config
+    from statsmodels.tsa.statespace.sarimax import SARIMAX
+    from sklearn.metrics import mean_squared_error
+    from sklearn.metrics import mean_absolute_error
+    import warnings
+    import pandas as pd
+    import pyodbc
+    from statsmodels.tools.sm_exceptions import ConvergenceWarning
+    from pandas import read_csv
+    from pandas import datetime
+    from statsmodels.tsa.arima_model import ARIMA
+    import numpy as np
+    import pmdarima as pm
+    from pmdarima import model_selection
+    import datetime
+    from datetime import datetime, timedelta
+    import matplotlib.pyplot as plt
+    from sklearn.model_selection import train_test_split
+
+    crop_lc = crop.lower()
+    ctry_lc = ctry.lower()
+    tctr_lc = trade_ctry.lower()
+    ctgr_lc = ctgr.lower()
+
+    # Get prices interpolated
+    df_vols = extract.get_volumes(crop,ctry,trade_ctry)
+
+    # Save null indexes with their original index id
+    dfNullID = extract.get_null_prices(crop,ctry,trade_ctry,ctgr)
+
+    ### Our data is weekly based and the exploratory analysis has shown us that there is a clear seasonality. 
+    ### So let's set up seasonal_order parameter to see if we improve the estimation and for train data (all observations except the last year)
+    df_vols_train, df_vols_test =         train_test_split(df_vols, shuffle=False, test_size=len(df_vols[df_vols.index.year==max(df_vols.index.year)]))
+
+    # Evaluate parameters
+    p_values = range(0, 10)
+    d_values = range(0, 5)
+    q_values = range(0, 5)
+
+    warnings.filterwarnings("ignore")
+
+    # Get the best ARIMA model
+    best_model = evaluate_models(df_vols_train.values, p_values, d_values, q_values, crop, ctry, dfNullID)
+
+    # Generate model!
+    model = SARIMAX(df_vols_train, order = best_model, seasonal_order=(1, 1, 1, 52)).fit()
+
+    # Monkey patch around bug in ARIMA class
+    def __getnewargs__(self):
+        return ((self.endog),(self.k_lags, self.k_diff, self.k_ma))
+    ARIMA.__getnewargs__ = __getnewargs__
+
+    # Save model as a pickle, .pkl file
+    model.save(f'../../data/04_models/model_arima_vols_{crop_lc}_{ctry_lc}_{tctr_lc}_{ctgr_lc}.pkl')
+
+    # Save model summary as an independent file		
+    plt.rc('figure', figsize=(12, 7))
+    plt.text(0.01, 0.05, str(model.summary()), {'fontsize': 10}, fontproperties = 'monospace') # approach improved by OP -> monospace!
+    plt.axis('off')
+    plt.tight_layout()
+    updated = datetime.now().strftime("%Y%m%d_%H%M%S")
+    dir_img = f'../../data/04_models/Summary_ARIMA_vols_{crop_lc}_{ctry_lc}_{tctr_lc}_{ctgr_lc}_{updated}.png'
+    plt.savefig(dir_img)
+
+
+# %%
+
 
 

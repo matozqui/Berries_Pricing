@@ -20,6 +20,7 @@ def denormalize(norm_inst,norm):
     ##  Function to denormalize continous variables into the real continous variable ##
 
     from sklearn.preprocessing import MinMaxScaler
+    import pandas as pd
 
     descaling_input = norm_inst.inverse_transform(norm)
     
