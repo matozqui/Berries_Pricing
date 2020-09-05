@@ -87,7 +87,7 @@ Models used in the project are the following:
 
 ### 4_5_Visualize
 
-A [Microsoft® SQL Analysis Services](https://docs.microsoft.com/es-es/analysis-services/ssas-overview?view=asallproducts-allversions) model includes all cleaned data from external sources and predicted data resulting from the inference of the models:
+A [Microsoft® SQL Analysis Services](https://docs.microsoft.com/es-es/analysis-services/ssas-overview?view=asallproducts-allversions) model includes all cleaned data from external sources and predicted data resulting from the inference of the models. A star schema is being used, with four central fact tables (prices, volumes, prices plus volumes and prices predicted) surrounded by dimension tables which are denormalize (country, trade country, regions, time, campaign, product, format).
 ![SSAS_diagram](/img/SSAS_diagram.JPG)
 
 Then a series of [Power BI]([https://powerbi.microsoft.com/es-es/]) dashboards connected to this model make possible to check all this data.
