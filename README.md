@@ -54,6 +54,36 @@ Structure based on [Data Science for Social Good](https://github.com/dssg/hitchh
 
 # 4_Methodology
 
+During the project different technologies, techniques and analytical methods have been used trying to fit-to-purpose.
+
+## 4_1_Ingestion
+
+Data is collected using web scrapping techniques (US data) and pandas excel import feature (Spanish data). Then is stored in an SQL Server database which consolidates all data in one repository.
+
+## 4_2_Cleaning
+
+Data cleaning and transformation includes descriptive tags homogenizing, measures grouping, resampling, merging, interpolating, type transformations. One of the main issues is handling non-campaign periods in which there are not prices (target variable to predict.) To handle it data is interpolated to train models but omitted when validating and predicting.
+
+## 4_3_Exploration
+
+To better understand the nature of data a series of analysis are carried out:
+* Series evolution line charts grouped by year to understand trend and seasonality
+* Yearly-wise and weekly-wise boxplots to understand trend and seasonality respectively
+* Autocorrelation function (ACF) to find correlations of present time points with lags
+* Partially autocorrelation function (PACF) to find correlation of the residuals (which remains after removing the effects which are already explained by the earlier lag(s))
+
+## 4_4_Modelling
+
+Models used in the project are the following:
+* **ARIMA**: autoregression model based on the idea that time points of time series data can impact current and future time points.
+* **SARIMA**: improved ARIMA with a seasonal component that usually fits well on seasonal data.
+* **SARIMAX**: it is a model based on SARIMA and introduces exogenous variables in the model which needs to be fitted in the same training, testing and forecasting date index and shape as the endogenous variables
+
+## 4_5_Visualize
+
+A [Microsoft® SQL Analysis Services] (https://docs.microsoft.com/es-es/analysis-services/ssas-overview?view=asallproducts-allversions) model includes all cleaned data from external sources and predicted data resulting from the inference of the models. 
+Then a series of [Power BI] ([https://powerbi.microsoft.com/es-es/]) dashboards connected to this model make possible to check all this data.
+
 # 5_Architecture
 
 ![arquitecture](/docs/arquitecture.jpg)
