@@ -1,9 +1,17 @@
-# Berries_Pricing
+# Berries market prices predictor
+![berries frame](/docs/berries_frame.jpg)
 
-Berries pricing data study
+* [1_Introduction](#1_Introduction)
+* [2_Directory_structure](#2_Directory_structure)
+* [3_Raw_data](#3_Raw_data)
+* [4_Methodology](#4_Methodology)
+* [5_Architecture](#5_Architecture)
+* [6_Summary](#6_Summary)
+* [7_Conclusions](#7_Conclusions)
 
-Directory structure:
+# 1. Introduction
 
+# 2_Directory_structure
 ```
 ├── README.md          <- The top-level README for developers.
 ├── conf               <- Space for credentials
@@ -32,4 +40,28 @@ Directory structure:
 └── src                <- Source code for use in this project.
 ```
 
-I chose to follow the project structure laid out by the people at [Data Science for Social Good](https://github.com/dssg/hitchhikers-guide/blob/master/sources/curriculum/0_before_you_start/pipelines-and-project-workflow/README.md) with a slightly-modified schema.
+Structure based on [Data Science for Social Good](https://github.com/dssg/hitchhikers-guide/blob/master/sources/curriculum/0_before_you_start/pipelines-and-project-workflow/README.md) with a slightly-modified schema.
+
+# 3_Raw_data
+
+| Data Source | Data Kind | Geography | Format | Periodicity | History | Rows |
+| :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| USDA | Market prices | Market prices | US (84 regions) | URL | 10 years | 40000 |
+| USDA | Market volumes | Market volumes | US (24 regions) | URL | 20 years | 150000 |
+| Junta Andalucia | Market prices | Spain | .xls | Weekly | 4 years | 500 |
+| Int. Blueberry Org. | Market volumes | Spain | .xls | Weekly | 5 years | 3000 |
+| Ministerio Agricultura | Labour Cost | Spain | Yearly | .xls | Yearly | 35 |
+
+# 4_Methodology
+
+# 5_Architecture
+
+![arquitecture](/docs/arquitecture.jpg)
+
+Design made with [Cloud Skew app](https://www.cloudskew.com/)
+
+# 6_Summary
+
+# 7_Conclusions
+
+
