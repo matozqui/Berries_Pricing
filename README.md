@@ -104,7 +104,7 @@ Design made with [Cloud Skew app](https://www.cloudskew.com/)
 
 # 6_Summary
 
-![Exploratory](/data/02_intermediate/exloratory_analysis/)
+![Exploratory results](https://github.com/matozqui/Berries_Pricing/tree/master/data/02_intermediate/exloratory_analysis)
 
 # 7_Conclusions
 
