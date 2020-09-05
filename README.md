@@ -30,6 +30,8 @@
 │
 ├── docs               <- Space for documentation
 │
+├── img                <- Pictures for documentation
+│
 ├── notebooks          <- Jupyter notebooks
 │
 ├── references         <- Data sources, dictionaries, manuals, inspitation material, etc.
@@ -101,6 +103,8 @@ Then a series of [Power BI]([https://powerbi.microsoft.com/es-es/]) dashboards c
 Design made with [Cloud Skew app](https://www.cloudskew.com/)
 
 # 6_Summary
+
+![Exploratory](/data/02_intermediate/exloratory_analysis/)
 
 # 7_Conclusions
 
