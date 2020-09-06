@@ -96,7 +96,7 @@ Measures used to valuate accuracy of the predicting results are the following:
 ### 4_5_Visualize
 
 A [Microsoft® SQL Analysis Services](https://docs.microsoft.com/es-es/analysis-services/ssas-overview?view=asallproducts-allversions) model includes all cleaned data from external sources and predicted data resulting from the inference of the models.
-A star schema is being used, with four central fact tables (prices, volumes, prices plus volumes and prices predicted) surrounded by dimension tables which are denormalize (country, trade country, regions, time, campaign, product, format):
+<br>A star schema is being used, with four central fact tables (prices, volumes, prices plus volumes and prices predicted) surrounded by dimension tables which are denormalize (country, trade country, regions, time, campaign, product, format):
 
 ![SSAS_diagram](/img/SSAS_diagram.JPG)
 
@@ -111,11 +111,11 @@ Design made with [Cloud Skew app](https://www.cloudskew.com/)
 # 6_Summary
 
 [Strawberries Spain](https://github.com/matozqui/Berries_Pricing/blob/master/data/02_intermediate/exloratory_analysis/STRAWBERRIES_ES_ES_std.pdf)
-[Strawberries US imports from Mexico](https://github.com/matozqui/Berries_Pricing/blob/master/data/02_intermediate/exloratory_analysis/STRAWBERRIES_US_MX_med.pdf)
-[Blueberries Spain](https://github.com/matozqui/Berries_Pricing/blob/master/data/02_intermediate/exloratory_analysis/BLUEBERRIES_ES_ES_std.pdf)
-[Blueberries US imports from Mexico](https://github.com/matozqui/Berries_Pricing/blob/master/data/02_intermediate/exloratory_analysis/BLUEBERRIES_US_MX_std.pdf)
-[Raspberries Spain](https://github.com/matozqui/Berries_Pricing/blob/master/data/02_intermediate/exloratory_analysis/RASPBERRIES_ES_ES_std.pdf)
-[Raspberries US imports from Mexico](https://github.com/matozqui/Berries_Pricing/blob/master/data/02_intermediate/exloratory_analysis/RASPBERRIES_US_MX_std.pdf)
+<br>[Strawberries US imports from Mexico](https://github.com/matozqui/Berries_Pricing/blob/master/data/02_intermediate/exloratory_analysis/STRAWBERRIES_US_MX_med.pdf)
+<br>[Blueberries Spain](https://github.com/matozqui/Berries_Pricing/blob/master/data/02_intermediate/exloratory_analysis/BLUEBERRIES_ES_ES_std.pdf)
+<br>[Blueberries US imports from Mexico](https://github.com/matozqui/Berries_Pricing/blob/master/data/02_intermediate/exloratory_analysis/BLUEBERRIES_US_MX_std.pdf)
+<br>[Raspberries Spain](https://github.com/matozqui/Berries_Pricing/blob/master/data/02_intermediate/exloratory_analysis/RASPBERRIES_ES_ES_std.pdf)
+<br>[Raspberries US imports from Mexico](https://github.com/matozqui/Berries_Pricing/blob/master/data/02_intermediate/exloratory_analysis/RASPBERRIES_US_MX_std.pdf)
 
 # 7_Conclusions
 
