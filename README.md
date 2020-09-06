@@ -124,6 +124,8 @@ Design made with [Cloud Skew app](https://www.cloudskew.com/)
  <embed src="https://drive.google.com/viewerng/
 viewer?embedded=true&url=https://github.com/matozqui/Berries_Pricing/blob/master/data/02_intermediate/exloratory_analysis/BLUEBERRIES_ES_ES_std.pdf" width="500" height="375">
 
+<iframe src="http://docs.google.com/gview?url=https://github.com/matozqui/Berries_Pricing/blob/master/data/02_intermediate/exloratory_analysis/BLUEBERRIES_ES_ES_std.pdf&embedded=true" style="width:718px; height:700px;" frameborder="0"></iframe>
+
 # 7_Conclusions
 
 
