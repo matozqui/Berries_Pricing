@@ -88,8 +88,8 @@ Models used in the project are the following:
 * **SARIMAX**: it is a model based on SARIMA and introduces exogenous variables in the model which needs to be fitted in the same training, testing and forecasting date index and shape as the endogenous variables.
 
 Measures used to valuate accuracy of the predicting results are the following:
-* **AIC (Akaike Information Criterion)**: a good model is the one that has minimum AIC among all the other models. The AIC can be used to select between the additive and multiplicative Holt-Winters models ([Quoc Nam Tran and Hamid Arabnia](https://www.sciencedirect.com/book/9780128025086/emerging-trends-in-computational-biology-bioinformatics-and-systems-biology)).
-* **BIC (Bayesian Information Criterion)**: another criteria for model selection that measures the trade-off between model fit and complexity of the model. A lower AIC or BIC value indicates a better fit [Quoc Nam Tran and Hamid Arabnia](https://www.sciencedirect.com/book/9780128025086/emerging-trends-in-computational-biology-bioinformatics-and-systems-biology)).
+* **AIC (Akaike Information Criterion)**: a good model is the one that has minimum AIC among all the other models. The AIC can be used to select between the additive and multiplicative Holt-Winters models.
+* **BIC (Bayesian Information Criterion)**: another criteria for model selection that measures the trade-off between model fit and complexity of the model. A lower AIC or BIC value indicates a better fit ([Quoc Nam Tran and Hamid Arabnia](https://www.sciencedirect.com/book/9780128025086/emerging-trends-in-computational-biology-bioinformatics-and-systems-biology)).
 * **MAE (Mean Absolute Error)**: measures the average of all absolute errors and it is an unambiguous accuracy measure, ideal to gain interpretability in a predictive model.
 
 
