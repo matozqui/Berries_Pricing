@@ -1,5 +1,5 @@
 # Berries market prices predictor
-![berries frame](/docs/berries_frame.jpg)
+![berries frame](/img/berries_frame.jpg)
 
 * [1_Introduction](#1_Introduction)
 * [2_Directory_structure](#2_Directory_structure)
@@ -29,6 +29,8 @@
 │   └── 05_visualizations   <- Reports and input to frontend
 │
 ├── docs               <- Space for documentation
+│
+├── img                <- Pictures for documentation
 │
 ├── notebooks          <- Jupyter notebooks
 │
@@ -88,14 +90,21 @@ Models used in the project are the following:
 ### 4_5_Visualize
 
 A [Microsoft® SQL Analysis Services](https://docs.microsoft.com/es-es/analysis-services/ssas-overview?view=asallproducts-allversions) model includes all cleaned data from external sources and predicted data resulting from the inference of the models. 
+A star schema is being used, with four central fact tables (prices, volumes, prices plus volumes and prices predicted) surrounded by dimension tables which are denormalize (country, trade country, regions, time, campaign, product, format):
+
+![SSAS_diagram](/img/SSAS_diagram.JPG)
+
 Then a series of [Power BI]([https://powerbi.microsoft.com/es-es/]) dashboards connected to this model make possible to check all this data.
 
 # 5_Architecture
 
-![arquitecture](/docs/arquitecture.jpg)
+![arquitecture](/img/arquitecture.jpg)
+
 Design made with [Cloud Skew app](https://www.cloudskew.com/)
 
 # 6_Summary
+
+![Exploratory results](https://github.com/matozqui/Berries_Pricing/tree/master/data/02_intermediate/exloratory_analysis)
 
 # 7_Conclusions
 
