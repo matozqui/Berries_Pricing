@@ -110,7 +110,12 @@ Design made with [Cloud Skew app](https://www.cloudskew.com/)
 
 # 6_Summary
 
+[Strawberries Spain](https://github.com/matozqui/Berries_Pricing/blob/master/data/02_intermediate/exloratory_analysis/STRAWBERRIES_ES_ES_std.pdf)
+[Strawberries US imports from Mexico](https://github.com/matozqui/Berries_Pricing/blob/master/data/02_intermediate/exloratory_analysis/STRAWBERRIES_US_MX_med.pdf)
 [Blueberries Spain](https://github.com/matozqui/Berries_Pricing/blob/master/data/02_intermediate/exloratory_analysis/BLUEBERRIES_ES_ES_std.pdf)
+[Blueberries US imports from Mexico](https://github.com/matozqui/Berries_Pricing/blob/master/data/02_intermediate/exloratory_analysis/BLUEBERRIES_US_MX_std.pdf)
+[Raspberries Spain](https://github.com/matozqui/Berries_Pricing/blob/master/data/02_intermediate/exloratory_analysis/RASPBERRIES_ES_ES_std.pdf)
+[Raspberries US imports from Mexico](https://github.com/matozqui/Berries_Pricing/blob/master/data/02_intermediate/exloratory_analysis/RASPBERRIES_US_MX_std.pdf)
 
 # 7_Conclusions
 
