@@ -110,7 +110,7 @@ Design made with [Cloud Skew app](https://www.cloudskew.com/)
 
 # 6_Summary
 
-![Exploratory results](https://github.com/matozqui/Berries_Pricing/tree/master/data/02_intermediate/exloratory_analysis)
+![Exploratory results](https://github.com/matozqui/Berries_Pricing/blob/master/data/02_intermediate/exloratory_analysis/BLUEBERRIES_ES_ES_std.pdf)
 
 <object data="https://github.com/matozqui/Berries_Pricing/blob/master/data/02_intermediate/exloratory_analysis/BLUEBERRIES_ES_ES_std.pdf" type="application/pdf" width="700px" height="700px">
     <embed src="https://github.com/matozqui/Berries_Pricing/blob/master/data/02_intermediate/exloratory_analysis/BLUEBERRIES_ES_ES_std.pdf">
