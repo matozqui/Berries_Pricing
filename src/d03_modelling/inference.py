@@ -224,7 +224,7 @@ def get_prediction_vols(ctry,crop,trade_ctry,regn,ctgr,pkge,crcy,msre,mdel,start
     yr = str(datetime.now().year+1)
 
     #pred = ld_model.get_prediction(start=start, end=end, dynamic=True)
-    if mdel == 'ARIMA':  
+    if mdel == 'SARIMA':  
         pred = ld_model.get_prediction(start=start, end=end, dynamic=True)
         df_pred = pred.predicted_mean.to_frame(name='Volume_estimated')
     else: 
