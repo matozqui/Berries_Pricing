@@ -102,6 +102,10 @@ A [Microsoft® SQL Analysis Services](https://docs.microsoft.com/es-es/analysis-
 
 Then a series of [Power BI]([https://powerbi.microsoft.com/es-es/]) dashboards connected to this model make possible to look through different type of visualizations that explain prices and volumes in different ways.
 
+<figure class="PwBI_dashboard">
+  <iframe width="600" height="373.5" src="https://app.powerbi.com/view?r=eyJrIjoiM2IxYzg3OGItY2U5YS00ZWU0LTk0YTktZjcyYWNmZGM3YjM3IiwidCI6IjFkOGU3NzE5LWI2ZjctNGI3ZS1hN2IxLTliOTk3NTI5NTEyMiIsImMiOjh9&pageName=ReportSection" frameborder="0" allowFullScreen="true"></iframe>
+</figure>
+
 # 5_Architecture
 
 ![arquitecture](/img/arquitecture.jpg)
