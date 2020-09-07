@@ -98,7 +98,9 @@ Measures used to valuate accuracy of the predicting results are the following:
 A [Microsoft® SQL Analysis Services](https://docs.microsoft.com/es-es/analysis-services/ssas-overview?view=asallproducts-allversions) model includes all cleaned data from external sources and predicted data resulting from the inference of the models.
 <br>A star schema is being used, with four central fact tables (prices, volumes, prices plus volumes and prices predicted) surrounded by dimension tables which are denormalize (country, trade country, regions, time, campaign, product, format):
 
-![SSAS_diagram](/img/SSAS_diagram.JPG)
+<p float="centre">
+  <img src="/img/SSAS_diagram.JPG" width="600" />
+</p>
 
 Then a series of [Power BI]([https://powerbi.microsoft.com/es-es/]) dashboards connected to this model make possible to look through different type of visualizations that explain prices and volumes in different ways.
 
