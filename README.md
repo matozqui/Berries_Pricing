@@ -69,7 +69,7 @@ Data is collected using web scrapping techniques (US data) and pandas excel impo
 
 ### 4_2_Cleaning
 
-Data cleaning and transformation includes descriptive tags homogenizing, format conversions to kilogrames, geolocation, measures grouping, resampling, merging, interpolating, type transformations.
+Data cleaning and transformation includes descriptive tags homogenizing, format conversions to kilogrames, geolocation, measures grouping, resampling, merging, interpolating, type transformations, normalization and denormalization of data to fit models.
 One of the main issues is handling non-campaign periods in which there are not prices (target variable to predict.) To handle it data is interpolated to train models but omitted when validating and predicting.
 
 ### 4_3_Exploration
