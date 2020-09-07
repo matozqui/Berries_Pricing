@@ -61,7 +61,7 @@ Structure based on [Data Science for Social Good](https://github.com/dssg/hitchh
 
 # 4_Methodology
 
-During the project different technologies, techniques and analytical methods have been used trying to fit-to-purpose of each step.
+During the different steps of the project different technologies, techniques and analytical methods have been applied:
 
 ### 4_1_Ingestion
 
