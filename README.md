@@ -61,7 +61,7 @@ Structure based on [Data Science for Social Good](https://github.com/dssg/hitchh
 
 # 4_Methodology
 
-During the project different technologies, techniques and analytical methods have been used trying to fit-to-purpose of each step.
+During the different steps of the project different technologies, techniques and analytical methods have been applied:
 
 ### 4_1_Ingestion
 
@@ -98,7 +98,9 @@ Measures used to valuate accuracy of the predicting results are the following:
 A [Microsoft® SQL Analysis Services](https://docs.microsoft.com/es-es/analysis-services/ssas-overview?view=asallproducts-allversions) model includes all cleaned data from external sources and predicted data resulting from the inference of the models.
 <br>A star schema is being used, with four central fact tables (prices, volumes, prices plus volumes and prices predicted) surrounded by dimension tables which are denormalize (country, trade country, regions, time, campaign, product, format):
 
-![SSAS_diagram](/img/SSAS_diagram.JPG)
+<p float="centre">
+  <img src="/img/SSAS_diagram.JPG" width="600" />
+</p>
 
 Then a series of [Power BI]([https://powerbi.microsoft.com/es-es/]) dashboards connected to this model make possible to look through different type of visualizations that explain prices and volumes in different ways.
 
@@ -114,12 +116,84 @@ Design made with [Cloud Skew app](https://www.cloudskew.com/)
 
 # 6_Summary
 
-[Strawberries Spain](https://github.com/matozqui/Berries_Pricing/blob/master/data/02_intermediate/exloratory_analysis/STRAWBERRIES_ES_ES_std.pdf)
-<br>[Strawberries US imports from Mexico](https://github.com/matozqui/Berries_Pricing/blob/master/data/02_intermediate/exloratory_analysis/STRAWBERRIES_US_MX_med.pdf)
-<br>[Blueberries Spain](https://github.com/matozqui/Berries_Pricing/blob/master/data/02_intermediate/exloratory_analysis/BLUEBERRIES_ES_ES_std.pdf)
-<br>[Blueberries US imports from Mexico](https://github.com/matozqui/Berries_Pricing/blob/master/data/02_intermediate/exloratory_analysis/BLUEBERRIES_US_MX_std.pdf)
-<br>[Raspberries Spain](https://github.com/matozqui/Berries_Pricing/blob/master/data/02_intermediate/exloratory_analysis/RASPBERRIES_ES_ES_std.pdf)
-<br>[Raspberries US imports from Mexico](https://github.com/matozqui/Berries_Pricing/blob/master/data/02_intermediate/exloratory_analysis/RASPBERRIES_US_MX_std.pdf)
+### 6_1_Strawberries_Spain
+
+Prices tend to be very high at the beginning of campaigns (end of the year) and rapidly decrease, tending to form a Gamma distribution shape as most prices are concentrated in the low range and a few in a high range. Also there are strong positive correlations in same periods of previous years, a clear seasonality and a downtrend.
+<p float="centre">
+  <img src="/data/02_intermediate/exloratory_analysis/STRAWBERRIES_ES_ES_std_distribution.png" width="300" />
+  <img src="/data/02_intermediate/exloratory_analysis/STRAWBERRIES_ES_ES_std_acf.png" width="300" /> 
+  <img src="/data/02_intermediate/exloratory_analysis/STRAWBERRIES_ES_ES_std_pacf.png" width="300" />
+</p>
+<p float="centre">
+  <img src="/data/02_intermediate/exloratory_analysis/STRAWBERRIES_ES_ES_std_boxplot_years.png" width="300" />
+ <img src="/data/02_intermediate/exloratory_analysis/STRAWBERRIES_ES_ES_std_boxplot_weeks.png" width="600" />
+</p>
+
+### 6_2_Strawberries_USA
+
+A bit more noise is being detected compared with Spanish same product. Also prices tend to be very high at the beginning of campaigns and then falls sharply but with a seeming rise before the end of campaigns. Resulting distribution is not very clear across campaigns but is mostly gaussian with a left peak. Not significant correlations appreciated from the ACF and PACF analysis.
+<p float="centre">
+  <img src="/data/02_intermediate/exloratory_analysis/STRAWBERRIES_US_MX_med_distribution.png" width="300" />
+  <img src="/data/02_intermediate/exloratory_analysis/STRAWBERRIES_US_MX_med_acf.png" width="300" /> 
+  <img src="/data/02_intermediate/exloratory_analysis/STRAWBERRIES_US_MX_med_pacf.png" width="300" />
+</p>
+<p float="centre">
+  <img src="/data/02_intermediate/exloratory_analysis/STRAWBERRIES_US_MX_med_boxplot_years.png" width="300" />
+ <img src="/data/02_intermediate/exloratory_analysis/STRAWBERRIES_US_MX_med_boxplot_weeks.png" width="600" />
+</p>
+
+### 6_3_Blueberries_Spain
+
+At the beginning of campaign prices tend to be high, falling sharply and increasing at the end of the campaign, forming a bimodal distribution. Also there is a strong negative correlation with previous half year periods lags and positive for same periods of past years. Not a very clear trend identified but there is a clear normalization of prices as boxplot analysis suggests. 
+<br>Blueberry harvest in Spain is usually concentrated between march (week 10) and September (week 36), so it seems to be a strong negative correlation between volume production and prices during the periods analyzed.
+<p float="centre">
+  <img src="/data/02_intermediate/exloratory_analysis/BLUEBERRIES_ES_ES_std_distribution.png" width="300" />
+  <img src="/data/02_intermediate/exloratory_analysis/BLUEBERRIES_ES_ES_std_acf.png" width="300" /> 
+  <img src="/data/02_intermediate/exloratory_analysis/BLUEBERRIES_ES_ES_std_pacf.png" width="300" />
+</p>
+<p float="centre">
+  <img src="/data/02_intermediate/exloratory_analysis/BLUEBERRIES_ES_ES_std_boxplot_years.png" width="300" />
+ <img src="/data/02_intermediate/exloratory_analysis/BLUEBERRIES_ES_ES_std_boxplot_weeks.png" width="600" />
+</p>
+
+### 6_4_Blueberries_USA
+
+As it happens with same crop in Spanish geography campaigns tend to start in a high price range, then drop and finally increase. This forms a binomial distribution with two clear peaks. What it is remarkable is a clear downtrend of prices from years 2014 to 2020.
+<p float="centre">
+  <img src="/data/02_intermediate/exloratory_analysis/BLUEBERRIES_US_MX_std_distribution.png" width="300" />
+  <img src="/data/02_intermediate/exloratory_analysis/BLUEBERRIES_US_MX_std_acf.png" width="300" /> 
+  <img src="/data/02_intermediate/exloratory_analysis/BLUEBERRIES_US_MX_std_pacf.png" width="300" />
+</p>
+<p float="centre">
+  <img src="/data/02_intermediate/exloratory_analysis/BLUEBERRIES_US_MX_std_boxplot_years.png" width="300" />
+ <img src="/data/02_intermediate/exloratory_analysis/BLUEBERRIES_US_MX_std_boxplot_weeks.png" width="600" />
+</p>
+
+### 6_5_Raspberries_Spain
+
+Quite different crop in terms of campaign dates as it starts around week 36, finishing around week 26 of the following year. Campaigns start in a medium-high range of prices, decreasing greatly, then increasing to reach campaign peak prices and finally decreasing again. These two valleys could be partially explained by the impact of day-neutral varieties (two annual harvest).
+<p float="centre">
+  <img src="/data/02_intermediate/exloratory_analysis/RASPBERRIES_ES_ES_std_distribution.png" width="300" />
+  <img src="/data/02_intermediate/exloratory_analysis/RASPBERRIES_ES_ES_std_acf.png" width="300" /> 
+  <img src="/data/02_intermediate/exloratory_analysis/RASPBERRIES_ES_ES_std_pacf.png" width="300" />
+</p>
+<p float="centre">
+  <img src="/data/02_intermediate/exloratory_analysis/RASPBERRIES_ES_ES_std_boxplot_years.png" width="300" />
+ <img src="/data/02_intermediate/exloratory_analysis/RASPBERRIES_ES_ES_std_boxplot_weeks.png" width="600" />
+</p>
+
+### 6_6_Raspberries_USA
+
+Very similar behavior as Spanish raspberry in terms of seasonality and price range variations during years. Also during las few years there is a light downtrend.
+<p float="centre">
+  <img src="/data/02_intermediate/exloratory_analysis/RASPBERRIES_US_MX_std_distribution.png" width="300" />
+  <img src="/data/02_intermediate/exloratory_analysis/RASPBERRIES_US_MX_std_acf.png" width="300" /> 
+  <img src="/data/02_intermediate/exloratory_analysis/RASPBERRIES_US_MX_std_pacf.png" width="300" />
+</p>
+<p float="centre">
+  <img src="/data/02_intermediate/exloratory_analysis/RASPBERRIES_US_MX_std_boxplot_years.png" width="300" />
+ <img src="/data/02_intermediate/exloratory_analysis/RASPBERRIES_US_MX_std_boxplot_weeks.png" width="600" />
+</p>
 
 # 7_Conclusions
 
