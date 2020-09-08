@@ -135,7 +135,7 @@ A bit more noise is being detected compared with Spanish same product. Also pric
 <p float="centre">
   <img src="/data/02_intermediate/exloratory_analysis/STRAWBERRIES_US_MX_med_distribution.png" width="280px" />
   <img src="/data/02_intermediate/exloratory_analysis/STRAWBERRIES_US_MX_med_acf.png" width="280px" /> 
-  <img src="/data/02_intermediate/exloratory_analysis/STRAWBERRIES_US_MX_med_pacf.png" width="560px" />
+  <img src="/data/02_intermediate/exloratory_analysis/STRAWBERRIES_US_MX_med_pacf.png" width="280px" />
 </p>
 <p float="centre">
   <img src="/data/02_intermediate/exloratory_analysis/STRAWBERRIES_US_MX_med_boxplot_years.png" width="280px" />
