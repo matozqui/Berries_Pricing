@@ -15,3 +15,6 @@ crop_list_sarima = [['BLUEBERRIES','US','MX','std','SARIMA','','','USD','KG',Non
 crop_list_sarimax = [['BLUEBERRIES','US','MX','std','SARIMAX','','','USD','KG',None],\
     ['RASPBERRIES','US','MX','std','SARIMAX','','','USD','KG',None],\
     ['STRAWBERRIES','US','MX','med','SARIMAX','','','USD','KG',None]]
+crop_list_usa = [['BLUEBERRIES','BLUBY'],\
+    ['RASPBERRIES','RASP'],\
+    ['STRAWBERRIES','STRBY']]

@@ -249,8 +249,8 @@ def load_prices_bbdd(df_prices):
     import pyodbc
     import stringing as st
 
-    ctry = st.get_comma_values(df_volumes_prices.Country)
-    crop = st.get_comma_values(df_volumes_prices.Product)
+    ctry = st.get_comma_values(df_prices.Country)
+    crop = st.get_comma_values(df_prices.Product)
 
     connStr = pyodbc.connect(config.db_con)
     cursor = connStr.cursor()
