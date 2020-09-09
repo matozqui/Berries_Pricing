@@ -102,7 +102,7 @@ A [Microsoft® SQL Analysis Services](https://docs.microsoft.com/es-es/analysis-
   <img src="/img/SSAS_diagram.JPG" width="600" />
 </p>
 
-Then a series of Power BI dashboards connected to this model make possible to look through different type of visualizations that explain prices and volumes in different ways. This visualizations are uploaded in [Power BI website](https://powerbi.microsoft.com/es-es/) and you can access with the user _biprices@planasa.com_ and password _Planasa2020_. Also this [video](https://youtu.be/ROswL4pIjcY) shows how to access the reports step by step.
+Then a series of Power BI dashboards connected to this model make possible to look through different type of visualizations that explain prices and volumes in different ways. <br>This visualizations are uploaded in [Power BI website](https://powerbi.microsoft.com/es-es/) and you can access them with the user _biprices@planasa.com_ and password _Planasa2020_. Also this [video](https://youtu.be/ROswL4pIjcY) shows how to access the reports step by step.
 
 # 5_Architecture
 
