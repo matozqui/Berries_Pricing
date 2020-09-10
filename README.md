@@ -15,6 +15,11 @@
 * [7_Conclusions](#7_Conclusions)
 
 # 1. Introduction
+The aim of this project is to predict market prices of strawberry, blueberry and raspberry fruits paid to farmers in the US (mexican imports) and in Spain (internal production).
+<br>To anticipate prices in these markets is quite relevant because of various reasons:
+-	The global market for fresh berries was valued at a volume of 18 million metric ton in 2018, and it is estimated to register a CAGR of 1.8%.
+-	Spain is the EU leading producer in berries and Mexico also leads US berries imports
+-	Seasonality of the harvest is very important for the availability of these products during the year so the challenge for many companies is to create/produce differential varieties in precocity and productivity
 
 # 2_Directory_structure
 ```
