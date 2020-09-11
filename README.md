@@ -48,8 +48,6 @@ The aim of this project is to predict market prices of strawberry, blueberry and
 │
 ├── references         <- Data sources, dictionaries, manuals, inspitation material, etc.
 │
-├── results            <- Final analysis docs.
-│
 ├── requirements.txt   <- The requirements file for reproducing the 
 |                         analysis environment.
 │
