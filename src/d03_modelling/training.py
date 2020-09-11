@@ -40,7 +40,7 @@ def evaluate_models(dataset, p_values, d_values, q_values, crop, ctry, dfNullID)
 				except:
 					continue
 	print('Best ARIMA%s MAE=%.3f RMSE=%.3f BIAS=%.3f' % (best_cfg, best_score_mae, score_rmse, score_bias))
-	versions_file = '../../data/04_models/Model_versions.txt'
+	versions_file = '../../data/03_models/Model_versions.txt'
 	model_data = 'Best ARIMA%s MAE=%.3f RMSE=%.3f BIAS=%.3f' % (best_cfg, best_score_mae, score_rmse, score_bias)
 	updated = datetime.now().strftime("%Y%m%d_%H%M%S")
 	with open(versions_file, "a") as f:
@@ -167,7 +167,7 @@ def train_arima_model(crop,ctry,trade_ctry,ctgr,mdel):
     ARIMA.__getnewargs__ = __getnewargs__
 
     # Save model as a pickle, .pkl file
-    model.save(f'../../data/04_models/model_{mdel_lc}_{crop_lc}_{ctry_lc}_{tctr_lc}_{ctgr_lc}.pkl')
+    model.save(f'../../data/03_models/model_{mdel_lc}_{crop_lc}_{ctry_lc}_{tctr_lc}_{ctgr_lc}.pkl')
 
     # Save model summary as an independent file		
     plt.rc('figure', figsize=(12, 7))
@@ -175,7 +175,7 @@ def train_arima_model(crop,ctry,trade_ctry,ctgr,mdel):
     plt.axis('off')
     plt.tight_layout()
     updated = datetime.now().strftime("%Y%m%d_%H%M%S")
-    dir_img = f'../../data/04_models/Summary_{mdel}_{crop_lc}_{ctry_lc}_{tctr_lc}_{ctgr_lc}_{updated}.png'
+    dir_img = f'../../data/03_models/Summary_{mdel}_{crop_lc}_{ctry_lc}_{tctr_lc}_{ctgr_lc}_{updated}.png'
     plt.savefig(dir_img)
 
 
@@ -245,7 +245,7 @@ def train_sarima_model_vols(crop,ctry,trade_ctry,ctgr):
     ARIMA.__getnewargs__ = __getnewargs__
 
     # Save model as a pickle, .pkl file
-    model.save(f'../../data/04_models/model_sarima_vols_{crop_lc}_{ctry_lc}_{tctr_lc}_{ctgr_lc}.pkl')
+    model.save(f'../../data/03_models/model_sarima_vols_{crop_lc}_{ctry_lc}_{tctr_lc}_{ctgr_lc}.pkl')
 
     # Save model summary as an independent file		
     plt.rc('figure', figsize=(12, 7))
@@ -253,7 +253,7 @@ def train_sarima_model_vols(crop,ctry,trade_ctry,ctgr):
     plt.axis('off')
     plt.tight_layout()
     updated = datetime.now().strftime("%Y%m%d_%H%M%S")
-    dir_img = f'../../data/04_models/Summary_SARIMA_vols_{crop_lc}_{ctry_lc}_{tctr_lc}_{ctgr_lc}_{updated}.png'
+    dir_img = f'../../data/03_models/Summary_SARIMA_vols_{crop_lc}_{ctry_lc}_{tctr_lc}_{ctgr_lc}_{updated}.png'
     plt.savefig(dir_img)
 
 # %% [markdown]
@@ -294,7 +294,7 @@ def evaluate_xmodels(dataset, exog, p_values, d_values, q_values, crop, ctry, df
 				except:
 					continue
 	print('Best SARIMAX%s MAE=%.3f' % (best_cfg, best_score))
-	versions_file = '../../data/04_models/Model_versions.txt'
+	versions_file = '../../data/03_models/Model_versions.txt'
 	model_data = 'Best SARIMAX%s // MAE=%.3f // ' % (best_cfg, best_score)
 	updated = datetime.now().strftime("%Y%m%d_%H%M%S")
 	with open(versions_file, "a") as f:
@@ -429,7 +429,7 @@ def train_sarimax_model(crop,ctry,trade_ctry,ctgr,exog):
     ARIMA.__getnewargs__ = __getnewargs__
 
     # Save model as a pickle, .pkl file
-    model.save(f'../../data/04_models/model_sarimax_{crop_lc}_{ctry_lc}_{tctr_lc}_{ctgr_lc}.pkl')
+    model.save(f'../../data/03_models/model_sarimax_{crop_lc}_{ctry_lc}_{tctr_lc}_{ctgr_lc}.pkl')
 
     # Save model summary as an independent file		
     plt.rc('figure', figsize=(12, 7))
@@ -437,7 +437,7 @@ def train_sarimax_model(crop,ctry,trade_ctry,ctgr,exog):
     plt.axis('off')
     plt.tight_layout()
     updated = datetime.now().strftime("%Y%m%d_%H%M%S")
-    dir_img = f'../../data/04_models/Summary_SARIMAX_{crop_lc}_{ctry_lc}_{tctr_lc}_{ctgr_lc}_{updated}.png'
+    dir_img = f'../../data/03_models/Summary_SARIMAX_{crop_lc}_{ctry_lc}_{tctr_lc}_{ctgr_lc}_{updated}.png'
     plt.savefig(dir_img)
 
 
@@ -495,7 +495,7 @@ def calculate_measures(crop_list):
         trade_ctry_lc = trade_ctry.lower()
         ctgr_lc = ctgr.lower()
 
-        model_name = f'../../data/04_models/model_{mdel_lc}_{crop_lc}_{ctry_lc}_{trade_ctry_lc}_{ctgr_lc}.pkl'
+        model_name = f'../../data/03_models/model_{mdel_lc}_{crop_lc}_{ctry_lc}_{trade_ctry_lc}_{ctgr_lc}.pkl'
 
         try:
             ld_model = ARIMAResults.load(model_name)
@@ -563,7 +563,7 @@ def calculate_measures(crop_list):
         df_all_results['Result_num'].fillna(0, inplace = True)
     
     
-    df_all_results.to_excel('../../data/04_models/results_summary.xlsx')
+    df_all_results.to_excel('../../data/03_models/results_summary.xlsx')
 
     return df_all_results
 

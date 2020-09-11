@@ -37,8 +37,8 @@ The aim of this project is to predict market prices of strawberry, blueberry and
 │   ├── 01_raw              <- Immutable input data
 │   ├── 02_intermediate     <- Cleaned version of raw
 │   ├── 03_processed        <- Data used to develop models
-│   ├── 04_models           <- trained models
-│   └── 05_visualizations   <- Reports and input to frontend
+│   ├── 03_models           <- trained models
+│   └── 04_visualizations   <- Reports and input to frontend
 │
 ├── docs               <- Space for documentation
 │

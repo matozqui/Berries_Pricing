@@ -49,7 +49,7 @@ def get_prediction(ctry,crop,trade_ctry,regn,ctgr,pkge,crcy,msre,mdel,exog,start
     tctr_lc = trade_ctry.lower()
     ctgr_lc = ctgr.lower()
 
-    model_name = f'../../data/04_models/model_{mdel_lc}_{crop_lc}_{ctry_lc}_{tctr_lc}_{ctgr_lc}.pkl'
+    model_name = f'../../data/03_models/model_{mdel_lc}_{crop_lc}_{ctry_lc}_{tctr_lc}_{ctgr_lc}.pkl'
 
     try:
         ld_model = ARIMAResults.load(model_name)
@@ -212,7 +212,7 @@ def get_prediction_vols(ctry,crop,trade_ctry,regn,ctgr,pkge,crcy,msre,mdel,start
     tctr_lc = trade_ctry.lower()
     ctgr_lc = ctgr.lower()
 
-    model_name = f'../../data/04_models/model_{mdel_lc}_vols_{crop_lc}_{ctry_lc}_{tctr_lc}_{ctgr_lc}.pkl'
+    model_name = f'../../data/03_models/model_{mdel_lc}_vols_{crop_lc}_{ctry_lc}_{tctr_lc}_{ctgr_lc}.pkl'
 
     try:
         ld_model = ARIMAResults.load(model_name)
