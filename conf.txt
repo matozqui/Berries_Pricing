@@ -1,0 +1,3 @@
+Access to visualizations in https://powerbi.microsoft.com/es-es/
+user: biprices@planasa.com
+password: Planasa2020

@@ -441,3 +441,179 @@ def train_sarimax_model(crop,ctry,trade_ctry,ctgr,exog):
     plt.savefig(dir_img)
 
 
+# %%
+def calculate_measures(crop_list):
+
+    ##  Function to calculate measures of the different models .pkl saved ##
+
+    import sys
+    sys.path.insert(0, '../../src')
+    #   https://realpython.com/python-modules-packages/
+    sys.path.append('../../src/d00_utils')
+    sys.path.append('../../src/d01_data')
+    sys.path.append('../../src/d02_processing')
+    sys.path.append('../../src/d03_modelling')
+    import extractions as extract
+    import transformations as transf
+    import training as train
+    import import_data as imp
+    import inference as inf
+    import pandas as pd
+    import numpy as np
+    import config
+    import time  
+    from dateutil.relativedelta import relativedelta
+    from datetime import date
+    import config as conf
+    from statsmodels.tsa.arima_model import ARIMA
+    from statsmodels.tsa.arima_model import ARIMAResults
+    from datetime import datetime, timedelta
+    from sklearn.preprocessing import MinMaxScaler
+    from statsmodels.tsa.statespace.sarimax import SARIMAXResults
+    import pyodbc
+    import statsmodels.api as sm
+
+    df_all_results = pd.DataFrame()
+
+    # Iter through all crop models of crop_list
+    for i in range(0, len(crop_list)):
+
+        crop = crop_list[i][0]
+        ctry = crop_list[i][1]
+        trade_ctry = crop_list[i][2]
+        ctgr = crop_list[i][3]
+        mdel = crop_list[i][4]
+        regn = crop_list[i][5]
+        pkge = crop_list[i][6]
+        crcy = crop_list[i][7]
+        msre = crop_list[i][8]
+        exog = crop_list[i][9]
+
+        ctry_lc = ctry.lower()
+        crop_lc = crop.lower()
+        mdel_lc = mdel.lower()
+        trade_ctry_lc = trade_ctry.lower()
+        ctgr_lc = ctgr.lower()
+
+        model_name = f'../../data/04_models/model_{mdel_lc}_{crop_lc}_{ctry_lc}_{trade_ctry_lc}_{ctgr_lc}.pkl'
+
+        try:
+            ld_model = ARIMAResults.load(model_name)
+        except FileNotFoundError:
+            print('No model found')
+            break
+
+        # FIRST save standard results obtained from model summary:
+     
+        results_summary = ld_model.summary()
+        # Note that tables is a list. The table at index 1 is the "core" table. Additionally, read_html puts dfs in a list, so we want index 0
+        results_as_html = results_summary.tables[0].as_html()
+        df_results_int = pd.read_html(results_as_html, index_col=0)[0]
+        df_results_int['Crop'] = crop
+        df_results_int['Country'] = ctry
+        df_results_int['Trade_Country']  = trade_ctry
+        df_results_int['Model'] = mdel
+        df_results_int['Category']  = ctgr
+        df_results = df_results_int.reset_index().iloc[:, 0:2].rename(columns={0: "Concept", 1: "Result"})
+        df_results = df_results.append(df_results_int.reset_index().iloc[:, 2:4].rename(columns={2: "Concept", 3: "Result"})).dropna()
+        df_results = df_results.join(df_results_int.reset_index().iloc[:, 4:])
+        df_all_results = df_all_results.append(df_results)
+
+        # SECOND save calculated measures. 
+        # All models are fitted taking training values up to last day of previous year and inferenced the prediction for the next two years
+        # Taking into account this MAE, MAPE, MSE and RMSE are measured
+        start = date.today().strftime('%Y-01-01')
+        end = (date.today() + relativedelta(years=1)).strftime('%Y-12-31')
+        
+        if mdel == 'SARIMAX':
+            mdel_vols = 'SARIMA'
+            df_pred_vols = inf.get_prediction_vols(ctry,crop,trade_ctry,regn,ctgr,pkge,crcy,msre,mdel_vols,start,end)
+            exog = df_pred_vols[df_pred_vols.Date_ref > date.today().strftime('%Y-01-01')].drop(columns=['Volume']).set_index('Date_ref')
+
+        df_pred = inf.get_prediction(ctry,crop,trade_ctry,regn,ctgr,pkge,crcy,msre,mdel,exog,start,end)
+
+        df_pred = df_pred[(df_pred['Date_ref'].dt.year == date.today().year) & (df_pred['Date_ref'] < datetime.today()) & (df_pred['Price_estimated'] != 0) & (df_pred['Price'] != 0)]
+
+        # MAE
+        from sklearn.metrics import mean_absolute_error
+        mae = mean_absolute_error(df_pred.Price,df_pred.Price_estimated)
+        new_row = {'Concept':'MAE', 'Result':mae, 'Crop':crop, 'Country':ctry, 'Trade_Country':trade_ctry, 'Model':mdel, 'Category':ctgr}
+        df_all_results = df_all_results.append(new_row, ignore_index=True)
+
+        # MAPE
+        mape = np.mean(np.abs(df_pred.Price-df_pred.Price_estimated)/df_pred.Price_estimated)
+        new_row = {'Concept':'MAPE', 'Result':mape, 'Crop':crop, 'Country':ctry, 'Trade_Country':trade_ctry, 'Model':mdel, 'Category':ctgr}
+        df_all_results = df_all_results.append(new_row, ignore_index=True)
+
+        # MSE
+        from sklearn.metrics import mean_squared_error
+        # Use against predictions (we must calculate the square root of the MSE)
+        mse = mean_squared_error(df_pred.Price,df_pred.Price_estimated)
+        new_row = {'Concept':'MSE', 'Result':mse, 'Crop':crop, 'Country':ctry, 'Trade_Country':trade_ctry, 'Model':mdel, 'Category':ctgr}
+        df_all_results = df_all_results.append(new_row, ignore_index=True)
+
+        # RMSE
+        from sklearn.metrics import mean_squared_error
+        # Use against predictions (we must calculate the square root of the MSE)
+        rmse = np.sqrt(mean_squared_error(df_pred.Price,df_pred.Price_estimated))
+        new_row = {'Concept':'RMSE', 'Result':rmse, 'Crop':crop, 'Country':ctry, 'Trade_Country':trade_ctry, 'Model':mdel, 'Category':ctgr}
+        df_all_results = df_all_results.append(new_row, ignore_index=True)
+
+        df_all_results['Result_num'] = df_all_results[df_all_results.Concept.isin(['AIC','BIC','HQIC','MAE','MAPE','MSE','RMSE'])].Result.apply(pd.to_numeric, errors='coerce')
+        df_all_results['Result_num'].fillna(0, inplace = True)
+    
+    
+    df_all_results.to_excel('../../data/04_models/results_summary.xlsx')
+
+    return df_all_results
+
+
+# %%
+def load_measures_db(df_all_results):
+
+    ##  Function to save model measures results into the database ## 
+
+    import sys
+    sys.path.insert(0, '../../src')
+    #   https://realpython.com/python-modules-packages/
+    sys.path.append('../../src/d00_utils')
+    sys.path.append('../../src/d01_data')
+    sys.path.append('../../src/d02_processing')
+    sys.path.append('../../src/d03_modelling')
+    import extractions as extract
+    import transformations as transf
+    import training as train
+    import import_data as imp
+    import inference as inf
+    import pandas as pd
+    import numpy as np
+    import config
+    import time  
+    from dateutil.relativedelta import relativedelta
+    from datetime import date
+    import config as conf
+    from statsmodels.tsa.arima_model import ARIMA
+    from statsmodels.tsa.arima_model import ARIMAResults
+    from datetime import datetime, timedelta
+    from sklearn.preprocessing import MinMaxScaler
+    from statsmodels.tsa.statespace.sarimax import SARIMAXResults
+    import pyodbc
+
+    connStr = pyodbc.connect(config.db_con)
+    cursor = connStr.cursor()
+
+    # Load all data
+    upd = 0
+
+    for index,row in df_all_results.iterrows():
+        if row['Result_num'] != 0: # Save only valid measures, not descriptive data
+            cursor.execute("INSERT INTO dbo.models([Model],[Product],[Country],[Trade_Country],[Category],[Concept],[Result],[Updated]) values (?,?,?,?,?,?,?,?)",row['Model'],row['Crop'],row['Country'],row['Trade_Country'],row['Category'],row['Concept'],row['Result_num'],datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+            connStr.commit()
+            upd += 1
+
+    cursor.close()
+    connStr.close()
+
+    return (print(upd," new prices added"))
+
+
