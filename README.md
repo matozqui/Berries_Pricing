@@ -62,7 +62,7 @@ The aim of this project is to predict market prices of strawberry, blueberry and
     ├── d02_processing      <- Scripts for transformations and data preparation
     ├── d03_modelling       <- Scripts for training and inferencing models
     └── d04_visualisation   <- Visualization .pbix files
-
+```
 Structure based on [Data Science for Social Good](https://github.com/dssg/hitchhikers-guide/blob/master/sources/curriculum/0_before_you_start/pipelines-and-project-workflow/README.md) with a slightly-modified schema.
 
 # 3_Raw_data
