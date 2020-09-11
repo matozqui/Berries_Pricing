@@ -24,7 +24,7 @@
 # 1. Introduction
 The aim of this project is to predict market prices of strawberry, blueberry and raspberry fruits paid to farmers in the US (mexican imports) and in Spain (internal production).
 <br>To anticipate prices in these markets is quite relevant because of various reasons:
--	The global market for fresh berries was valued at a volume of 18 million metric ton in 2018, and it is estimated to register a CAGR of 1.8%.
+-	The global market for fresh berries was valued at a volume of 18 million metric ton in 2018, and it is estimated to register a CAGR of 1.8%
 -	Spain is the EU leading producer in berries and Mexico also leads US berries imports
 -	Seasonality of the harvest is very important for the availability of these products during the year so the challenge for many companies is to create/produce differential varieties in precocity and productivity
 
@@ -95,14 +95,17 @@ To better understand the nature of data a series of analysis are carried out:
 ### 4_4_Modelling
 
 Models used in the project are the following:
-* **ARIMA**: autoregression model based on the idea that time points of time series data can impact current and future time points.
-* **SARIMA**: improved ARIMA with a seasonal component that usually fits well on seasonal data.
-* **SARIMAX**: it is a model based on SARIMA and introduces exogenous variables in the model which needs to be fitted in the same training, testing and forecasting date index and shape as the endogenous variables.
+* **ARIMA**: autoregression model based on the idea that time points of time series data can impact current and future time points
+* **SARIMA**: improved ARIMA with a seasonal component that usually fits well on seasonal data
+* **SARIMAX**: it is a model based on SARIMA and introduces exogenous variables in the model which needs to be fitted in the same training, testing and forecasting date index and shape as the endogenous variables
 
 Measures used to valuate accuracy of the predicting results are the following:
-* **AIC (Akaike Information Criterion)**: a good model is the one that has minimum AIC among all the other models. The AIC can be used to select between the additive and multiplicative Holt-Winters models.
-* **BIC (Bayesian Information Criterion)**: another criteria for model selection that measures the trade-off between model fit and complexity of the model. A lower AIC or BIC value indicates a better fit ([Quoc Nam Tran and Hamid Arabnia](https://www.sciencedirect.com/book/9780128025086/emerging-trends-in-computational-biology-bioinformatics-and-systems-biology)).
-* **MAE (Mean Absolute Error)**: measures the average of all absolute errors and it is an unambiguous accuracy measure, ideal to gain interpretability in a predictive model.
+* **AIC (Akaike Information Criterion)**: a good model is the one that has minimum AIC among all the other models. The AIC can be used to select between the additive and multiplicative Holt-Winters models
+* **BIC (Bayesian Information Criterion)**: another criteria for model selection that measures the trade-off between model fit and complexity of the model. A lower AIC or BIC value indicates a better fit ([Quoc Nam Tran and Hamid Arabnia](https://www.sciencedirect.com/book/9780128025086/emerging-trends-in-computational-biology-bioinformatics-and-systems-biology))
+* **MAE (Mean Absolute Error)**: measures the average of all absolute errors and it is an unambiguous accuracy measure, ideal to gain interpretability in a predictive model
+* **MAPE (Mean Absolute Percentage Error)**: is the absolute error normalized over the data, which allows the error to be compared across data with different scales
+* **MSE (Mean Square Error)**: shows the average over the test sample of the absolute differences between prediction and actual observation
+* **RMSE (Root Mean Square Error)**: quadratic scoring rule that also measures the average magnitude of the error, giving a relatively high weight to large errors
 
 
 ### 4_5_Visualize
