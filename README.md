@@ -36,9 +36,8 @@ The aim of this project is to predict market prices of strawberry, blueberry and
 ├── data
 │   ├── 01_raw              <- Immutable input data
 │   ├── 02_intermediate     <- Cleaned version of raw
-│   ├── 03_processed        <- Data used to develop models
-│   ├── 04_models           <- trained models
-│   └── 05_visualizations   <- Reports and input to frontend
+│   ├── 03_models           <- trained models
+│   └── 04_visualizations   <- Reports and input to frontend
 │
 ├── docs               <- Space for documentation
 │
@@ -55,7 +54,11 @@ The aim of this project is to predict market prices of strawberry, blueberry and
 |                         outputs, system files etc
 │
 └── src                <- Source code for use in this project.
-```
+    ├── d00_utils           <- Scripts for general use
+    ├── d01_data            <- Scripts for importing and extracting data
+    ├── d02_processing      <- Scripts for transformations and data preparation
+    ├── d03_modelling       <- Scripts for training and inferencing models
+    └── d04_visualisation   <- Visualization .pbix files
 
 Structure based on [Data Science for Social Good](https://github.com/dssg/hitchhikers-guide/blob/master/sources/curriculum/0_before_you_start/pipelines-and-project-workflow/README.md) with a slightly-modified schema.
 
