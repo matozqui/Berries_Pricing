@@ -29,7 +29,6 @@ The aim of this project is to predict market prices of strawberry, blueberry and
 -	The global market for fresh berries was valued at a volume of 18 million metric ton in 2018, and it is estimated to register a CAGR of 1.8%
 -	Spain is the EU leading producer in berries and Mexico also leads US berries imports
 -	Seasonality of the harvest is very important for the availability of these products during the year so the challenge for many companies is to create/produce differential varieties in precocity and productivity
-
 <br>Also I work for a global operator in the agri-food sector, specialized in the berries nursery business and I have had the chance to grasp some knowledge about this market.
 
 # 2_Directory_structure
@@ -228,6 +227,7 @@ After doing the exploration a series of models have been generated, following a 
 -	A seasonal order of (1, 1, 52) for SARIMA models is applied as a clear annual seasonality was identified during exploration phase
 
 SARIMAX models have been generated for the three products in the US region including volumes imported from Mexico as exogenous variables. Volume data have been summarized weekly, fitted in an extra ARIMA model and predicted the convenient number of periods (current and next year) to finally fit the SARIMAX price model.
+
 <br>The benchmark around the models applied can be checked in a radar diagram [here](https://app.powerbi.com/view?r=eyJrIjoiNDBmMjRlZTEtYzgzZi00MWNiLWI1YjQtMGNmNzU1Yjc5MGRjIiwidCI6IjFkOGU3NzE5LWI2ZjctNGI3ZS1hN2IxLTliOTk3NTI5NTEyMiIsImMiOjh9&pageName=ReportSection), but in summary these are the main results with the best models highlighted:
 <p align="center">
 <img width="30%" src="/img/Model_results.JPG">
