@@ -20,6 +20,7 @@
   * [6_6_Raspberries_USA](#6_6_Raspberries_USA)
   * [6_7_Model_Results](#6_7_Model_Results)      
 * [7_Conclusions](#7_Conclusions)
+* [8_Next_steps](#8_Next_steps)
 
 # 1. Introduction
 The aim of this project is to predict market prices of strawberry, blueberry and raspberry fruits paid to farmers in the US (mexican imports) and in Spain (internal production).
@@ -27,6 +28,8 @@ The aim of this project is to predict market prices of strawberry, blueberry and
 -	The global market for fresh berries was valued at a volume of 18 million metric ton in 2018, and it is estimated to register a CAGR of 1.8%
 -	Spain is the EU leading producer in berries and Mexico also leads US berries imports
 -	Seasonality of the harvest is very important for the availability of these products during the year so the challenge for many companies is to create/produce differential varieties in precocity and productivity
+
+<br>Also I work for a global operator in the agri-food sector, specialized in the berries nursery business.
 
 # 2_Directory_structure
 ```
@@ -230,4 +233,13 @@ Generally speaking more complex models have obtained the best predicting results
 
 # 7_Conclusions
 
+-	Great model complexity does not guarantee better results. For example the best model for US strawberries prices prediction was ARIMA with a MAE of 0.53 VS 0.99 of SARIMAX.
+-	It takes a great amount of time to get cleaned data. In this project specially for homogenizing different sales formats, geographies and units of measure. Anyway is worth it as it allow to create great visualizations to understand reality and there are better chances to get a good prediction model.
+-	Structure and order is important for coding. It allows to scale problems faster and reduce programming errors.
+-	To succeed in a Data Science project a constant self-improvement mentality is required. There is never an ending and models could always be improved, but it is also important to make quick wins and congratulate oneself to keep pushing.
 
+# 8_Next_steps
+
+-	Find other exogenous variables which potentially improve model predictions (weather conditions, auxiliary material prices, consumer demand evolution)
+-	Include internal prices of my company in the Database to compare internal prices with market prices
+-	Test new models such as Prophet and random forests
