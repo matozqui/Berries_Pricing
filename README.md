@@ -215,12 +215,11 @@ After doing the exploration a series of models have been generated, following a 
 -	A seasonal order of (1, 1, 52) for SARIMA models is applied as a clear annual seasonality was identified during exploration phase
 
 SARIMAX models have been generated for the three products in the US region including volumes imported from Mexico as exogenous variables. Volume data have been summarized weekly, fitted in an extra ARIMA model and predicted the convenient number of periods (current and next year) to finally fit the SARIMAX price model.
-<br>The benchmark around the models applied can be checked in a radar diagram here, but in summary these are the main results with the best models highlighted:
+<br>The benchmark around the models applied can be checked in a radar diagram [here](https://app.powerbi.com/view?r=eyJrIjoiNDBmMjRlZTEtYzgzZi00MWNiLWI1YjQtMGNmNzU1Yjc5MGRjIiwidCI6IjFkOGU3NzE5LWI2ZjctNGI3ZS1hN2IxLTliOTk3NTI5NTEyMiIsImMiOjh9&pageName=ReportSection), but in summary these are the main results with the best models highlighted:
 <p align="center">
 <img width="30%" src="/img/Model_results.JPG">
 </p>
-Generally speaking more complex models have obtained the best predicting results (SARIMA in Spain and SARIMAX in the USA). The exceptions are Spanish raspberries and US strawberries, which casually showed unclear seasonality and trend during the exploration phase.
-In terms of deviation models-to-beat work reasonably well with average absolute deviations between 13% and 30%.
+Generally speaking more complex models have obtained the best predicting results (SARIMA in Spain and SARIMAX in the USA). The exceptions are Spanish raspberries and US strawberries, which casually showed unclear seasonality and trend during the exploration phase.<br>In terms of deviation models-to-beat work reasonably well with average absolute deviations between 13% and 30%.
 
 # 7_Conclusions
 
