@@ -196,6 +196,26 @@ Very similar behavior as Spanish raspberry in terms of seasonality and price ran
  <img src="/data/02_intermediate/exloratory_analysis/RASPBERRIES_US_MX_std_boxplot_weeks.png" width=60% />
 </p>
 
+### 6_7_Model_Results
+
+After doing the exploration a series of models have been generated, following a common criteria:
+-	Data period ranges are weekly
+-	Weeks with no target value (no campaign) have been interpolated for fitting the model and removed for measuring and predicting
+-	Training data include all prices up to the end of the last year (currently all prices up to 31st December 2019)
+-	Test data include all prices available related to the current year
+-	The inference of predictions are generated for the current and next year
+-	MAE is the measure selected to pick the best ARIMA order combination (p, d, q)
+-	A seasonal order of (1, 1, 52) for SARIMA models as a clear annual seasonality was identified during exploration phase
+
+<br>SARIMAX models have been generated for the three products in the US region including volumes imported from Mexico as exogenous variables. Volume data have been summarized weekly, fitted in an extra ARIMA model and predicted the convenient number of periods (current and next year) to finally fit the SARIMAX price model.
+<br>
+<br>The benchmark around the models applied can be checked in a radar diagram here, but in summary these are the main results with the best models highlighted:
+<p float="centre">
+<img width="30%" src="/img/Model_results.JPG">
+</p>
+<br>Generally speaking more complex models have obtained the best predicting results (SARIMA in Spain and SARIMAX in the USA). The exceptions are Spanish raspberries and US strawberries, which casually showed unclear seasonality and trend during the exploration phase.
+<In terms of deviation models-to-beat work reasonably well with average absolute deviations between 13% and 30%.
+
 # 7_Conclusions
 
 
