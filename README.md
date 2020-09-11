@@ -44,6 +44,9 @@ The aim of this project is to predict market prices of strawberry, blueberry and
 ├── img                <- Pictures for documentation
 │
 ├── notebooks          <- Jupyter notebooks
+│   ├── exploration    <- Exploration of data (mostly table dataframes and plots)
+│   ├── processing     <- Calls to processing functions (import data, update DB, train and inference models)  
+│   └── scripts        <- Jupyter notebooks saved in src directory as python scripts 
 │
 ├── references         <- Data sources, dictionaries, manuals, inspitation material, etc.
 │
