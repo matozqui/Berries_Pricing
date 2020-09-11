@@ -29,6 +29,7 @@ The aim of this project is to predict market prices of strawberry, blueberry and
 -	The global market for fresh berries was valued at a volume of 18 million metric ton in 2018, and it is estimated to register a CAGR of 1.8%
 -	Spain is the EU leading producer in berries and Mexico also leads US berries imports
 -	Seasonality of the harvest is very important for the availability of these products during the year so the challenge for many companies is to create/produce differential varieties in precocity and productivity
+
 <br>Also I work for a global operator in the agri-food sector, specialized in the berries nursery business and I have had the chance to grasp some knowledge about this market.
 
 # 2_Directory_structure
