@@ -20,13 +20,17 @@
   * [6_6_Raspberries_USA](#6_6_Raspberries_USA)
   * [6_7_Model_Results](#6_7_Model_Results)      
 * [7_Conclusions](#7_Conclusions)
+* [8_Next_steps](#8_Next_steps)
 
 # 1. Introduction
 The aim of this project is to predict market prices of strawberry, blueberry and raspberry fruits paid to farmers in the US (mexican imports) and in Spain (internal production).
 <br>To anticipate prices in these markets is quite relevant because of various reasons:
+
 -	The global market for fresh berries was valued at a volume of 18 million metric ton in 2018, and it is estimated to register a CAGR of 1.8%
 -	Spain is the EU leading producer in berries and Mexico also leads US berries imports
 -	Seasonality of the harvest is very important for the availability of these products during the year so the challenge for many companies is to create/produce differential varieties in precocity and productivity
+
+<br>Also I work for a global operator in the agri-food sector, specialized in the berries nursery business and I have had the chance to grasp some knowledge about this market.
 
 # 2_Directory_structure
 ```
@@ -36,7 +40,10 @@ The aim of this project is to predict market prices of strawberry, blueberry and
 ├── data
 │   ├── 01_raw              <- Immutable input data
 │   ├── 02_intermediate     <- Cleaned version of raw
+<<<<<<< HEAD
 │   ├── 03_processed        <- Data used to develop models
+=======
+>>>>>>> d6f0f6d5efc0ecba8c23078fa9a4ccc43d5efa70
 │   ├── 03_models           <- trained models
 │   └── 04_visualizations   <- Reports and input to frontend
 │
@@ -45,6 +52,9 @@ The aim of this project is to predict market prices of strawberry, blueberry and
 ├── img                <- Pictures for documentation
 │
 ├── notebooks          <- Jupyter notebooks
+│   ├── exploration    <- Exploration of data (mostly table dataframes and plots)
+│   ├── processing     <- Calls to processing functions (import data, train and inference models)  
+│   └── scripts        <- Jupyter notebooks saved in src directory as python scripts 
 │
 ├── references         <- Data sources, dictionaries, manuals, inspitation material, etc.
 │
@@ -55,9 +65,15 @@ The aim of this project is to predict market prices of strawberry, blueberry and
 |                         outputs, system files etc
 │
 └── src                <- Source code for use in this project.
+    ├── d00_utils           <- Scripts for general use
+    ├── d01_data            <- Scripts for importing and extracting data
+    ├── d02_processing      <- Scripts for transformations and data preparation
+    ├── d03_modelling       <- Scripts for training and inferencing models
+    └── d04_visualisation   <- Visualization .pbix files
 ```
-
 Structure based on [Data Science for Social Good](https://github.com/dssg/hitchhikers-guide/blob/master/sources/curriculum/0_before_you_start/pipelines-and-project-workflow/README.md) with a slightly-modified schema.
+
+Models' pickle files are available in [this public Google Drive directory](https://drive.google.com/drive/folders/1uSP2m3BMx9ofepc-X59iSIAm0VuQxhlj?usp=sharing)
 
 # 3_Raw_data
 
@@ -216,6 +232,7 @@ After doing the exploration a series of models have been generated, following a 
 -	A seasonal order of (1, 1, 52) for SARIMA models is applied as a clear annual seasonality was identified during exploration phase
 
 SARIMAX models have been generated for the three products in the US region including volumes imported from Mexico as exogenous variables. Volume data have been summarized weekly, fitted in an extra ARIMA model and predicted the convenient number of periods (current and next year) to finally fit the SARIMAX price model.
+
 <br>The benchmark around the models applied can be checked in a radar diagram [here](https://app.powerbi.com/view?r=eyJrIjoiNDBmMjRlZTEtYzgzZi00MWNiLWI1YjQtMGNmNzU1Yjc5MGRjIiwidCI6IjFkOGU3NzE5LWI2ZjctNGI3ZS1hN2IxLTliOTk3NTI5NTEyMiIsImMiOjh9&pageName=ReportSection), but in summary these are the main results with the best models highlighted:
 <p align="center">
 <img width="30%" src="/img/Model_results.JPG">
@@ -224,4 +241,13 @@ Generally speaking more complex models have obtained the best predicting results
 
 # 7_Conclusions
 
+-	Great model complexity does not guarantee better results. For example the best model for US strawberries prices prediction was ARIMA with a MAE of 0.53 VS 0.99 of SARIMAX.
+-	It takes a great amount of time to get cleaned data. In this project specially for homogenizing different sales formats, geographies and units of measure. Anyway is worth it as it allow to create great visualizations to understand reality and there are better chances to get a good prediction model.
+-	Structure and order is important for coding. It allows to scale problems faster and reduce programming errors.
+-	To succeed in a Data Science project a constant self-improvement mentality is required. There is never an ending and models could always be improved, but it is also important to make quick wins and congratulate oneself to keep pushing.
 
+# 8_Next_steps
+
+-	Find other exogenous variables which potentially improve model predictions (weather conditions, auxiliary material prices, consumer demand evolution)
+-	Include internal prices of my company in the Database to compare internal prices with market prices
+-	Test new models such as Prophet and random forests

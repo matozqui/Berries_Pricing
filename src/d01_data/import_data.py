@@ -144,6 +144,7 @@ def get_prices_usda(crop,crop_abb):
     from datetime import date, datetime, timedelta
     import numpy as np
     import pyodbc
+    import paths
 
     # Read format conversions to KG
     connStr = pyodbc.connect(config.db_con)
@@ -168,7 +169,7 @@ def get_prices_usda(crop,crop_abb):
     tyear = date.today().strftime('%Y')
 
     # URL for accessing prices
-    USprices = f"https://www.marketnews.usda.gov/mnp/fv-report-top-filters?&commAbr={crop_abb}&varName=&locAbr=&repType=shipPriceDaily&navType=byComm&locName=&navClass=&type=shipPrice&dr=1&volume=&commName={crop}&navClass,=&portal=fv&region=&repDate={fmonth}%2F{fday}%2F{fyear}&endDate={tmonth}%2F{tday}%2F{tyear}&format=excel&rebuild=false"
+    USprices = paths.usda_web_prices(crop_abb,crop,fmonth,fday,fyear,tmonth,tday,tyear)
     
     # Assign the table data in html format to a Pandas dataframe
     table =  pd.read_html(USprices,header=0,parse_dates=['Date'])[0]
@@ -394,6 +395,7 @@ def get_volumes_usda(crop,crop_abb):
     from datetime import date, datetime, timedelta
     import numpy as np
     import pyodbc
+    import paths
 
     # Setting dates
     # Date from
@@ -408,8 +410,7 @@ def get_volumes_usda(crop,crop_abb):
     tyear = date.today().strftime('%Y')
 
     # URL for accessing quantities
-    USquantity =f"https://www.marketnews.usda.gov/mnp/fv-report-top-filters?&commAbr={crop_abb}&varName=&locAbr=&repType=movementDaily&navType=byComm&locName=&navClass=&navClass=&type=movement&dr=1&volume=&commName={crop}&portal=fv&region=&repDate={fmonth}%2F{fday}%2F{fyear}&endDate={tmonth}%2F{tday}%2F{tyear}&format=excel&rebuild=false"
-        
+    USquantity = paths.usda_web_quantities(crop_abb,crop,fmonth,fday,fyear,tmonth,tday,tyear)        
     
     # Assign the table data in html format to a Pandas dataframe
     table =  pd.read_html(USquantity,header=0,parse_dates=['Date'])[0]
