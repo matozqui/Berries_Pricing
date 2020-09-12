@@ -130,7 +130,6 @@ A [Microsoft® SQL Analysis Services](https://docs.microsoft.com/es-es/analysis-
 </p>
 
 Then a series of Power BI dashboards connected to this model make possible to look through different type of visualizations that explain prices and volumes in different ways. <br>This visualizations are uploaded in [Power BI website](https://powerbi.microsoft.com/es-es/) and you can access them with the user _biprices@planasa.com_ and password _Planasa2020_. Also this [video](https://youtu.be/ROswL4pIjcY) shows how to access the reports step by step.
-
 <br>The difference between these and the rest of visualizations included in this readme is the connection. While this one is an online connection to the SSAS model, making possible to query more than 200K rows in a matter of tenth of seconds, the public ones are made with local connections which means there are showing static data. That is why online connections dashboards shows more detailed price and volume analysis.   
 
 # 5_Architecture
