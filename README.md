@@ -32,6 +32,8 @@ The aim of this project is to predict market prices of strawberry, blueberry and
 
 <br>Also I work for a global operator in the agri-food sector, specialized in the berries nursery business and I have had the chance to grasp some knowledge about this market.
 
+<br>You can check the prediction results [here](https://app.powerbi.com/view?r=eyJrIjoiODM1YTdhYmUtYWFkNi00YmZkLTllNmMtNzIwN2ViYzg4Y2M4IiwidCI6IjFkOGU3NzE5LWI2ZjctNGI3ZS1hN2IxLTliOTk3NTI5NTEyMiIsImMiOjh9)
+
 # 2_Directory_structure
 ```
 ├── README.md          <- The top-level README for developers.
@@ -40,10 +42,6 @@ The aim of this project is to predict market prices of strawberry, blueberry and
 ├── data
 │   ├── 01_raw              <- Immutable input data
 │   ├── 02_intermediate     <- Cleaned version of raw
-<<<<<<< HEAD
-│   ├── 03_processed        <- Data used to develop models
-=======
->>>>>>> d6f0f6d5efc0ecba8c23078fa9a4ccc43d5efa70
 │   ├── 03_models           <- trained models
 │   └── 04_visualizations   <- Reports and input to frontend
 │
@@ -132,12 +130,15 @@ A [Microsoft® SQL Analysis Services](https://docs.microsoft.com/es-es/analysis-
 </p>
 
 Then a series of Power BI dashboards connected to this model make possible to look through different type of visualizations that explain prices and volumes in different ways. <br>This visualizations are uploaded in [Power BI website](https://powerbi.microsoft.com/es-es/) and you can access them with the user _biprices@planasa.com_ and password _Planasa2020_. Also this [video](https://youtu.be/ROswL4pIjcY) shows how to access the reports step by step.
+<br>The difference between these and the rest of visualizations included in this readme is the connection. While this one is an online connection to the SSAS model, making possible to query more than 200K rows in a matter of tenth of seconds, the public ones are made with local connections which means there are showing static data. That is why online connections dashboards shows more detailed price and volume analysis.   
 
 # 5_Architecture
 
 ![arquitecture](/img/arquitecture.jpg)
 
 Design made with [Cloud Skew app](https://www.cloudskew.com/)
+
+The Jupyter Notebook [step_by_step](notebooks/processing/step_by_step.ipynb) include the whole process from ingesting data to predict. Also this repository includes the [SQL Server instance](data/01_raw/SQL_DB_Prices_CREATES.sql) with all tables structure and the [SSAS model](data/04_visualization/SSAS_Prices_CREATE.xmla). 
 
 # 6_Summary
 
@@ -229,7 +230,7 @@ After doing the exploration a series of models have been generated, following a 
 -	Test data include all prices available related to the current year
 -	The inference of predictions are generated for the current and next year
 -	MAE is the measure selected to pick the best ARIMA order combination (p, d, q)
--	A seasonal order of (1, 1, 52) for SARIMA models is applied as a clear annual seasonality was identified during exploration phase
+-	A seasonal order of (1, 1, 1, 52) for SARIMA models is applied as a clear annual seasonality was identified during exploration phase
 
 SARIMAX models have been generated for the three products in the US region including volumes imported from Mexico as exogenous variables. Volume data have been summarized weekly, fitted in an extra ARIMA model and predicted the convenient number of periods (current and next year) to finally fit the SARIMAX price model.
 
