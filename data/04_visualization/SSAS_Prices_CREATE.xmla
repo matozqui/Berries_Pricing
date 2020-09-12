@@ -1,0 +1,1505 @@
+{
+  "create": {
+    "database": {
+      "name": "Prices",
+      "compatibilityLevel": 1200,
+      "model": {
+        "culture": "es-ES",
+        "dataSources": [
+          {
+            "name": "SqlServer bipro02adminbi Prices",
+            "connectionString": "Provider=SQLNCLI11;Data Source=bipro02\\adminbi;Initial Catalog=Prices;Integrated Security=SSPI;Persist Security Info=false",
+            "impersonationMode": "impersonateAccount",
+            "account": "planasa\\adminbi",
+            "annotations": [
+              {
+                "name": "ConnectionEditUISource",
+                "value": "SqlServer"
+              }
+            ]
+          },
+          {
+            "name": "SqlServer bipro02adminbi PLANASA_DWH",
+            "connectionString": "Provider=SQLNCLI11;Data Source=bipro02\\adminbi;Initial Catalog=PLANASA_DWH;Integrated Security=SSPI;Persist Security Info=false",
+            "impersonationMode": "impersonateAccount",
+            "account": "planasa\\adminbi",
+            "annotations": [
+              {
+                "name": "ConnectionEditUISource",
+                "value": "SqlServer"
+              }
+            ]
+          }
+        ],
+        "tables": [
+          {
+            "name": "prices",
+            "columns": [
+              {
+                "name": "ID",
+                "dataType": "int64",
+                "isHidden": true,
+                "sourceColumn": "ID",
+                "sourceProviderType": "Integer",
+                "summarizeBy": "none"
+              },
+              {
+                "name": "Product",
+                "dataType": "string",
+                "sourceColumn": "Product",
+                "sourceProviderType": "WChar"
+              },
+              {
+                "name": "Country",
+                "dataType": "string",
+                "sourceColumn": "Country",
+                "sourceProviderType": "WChar"
+              },
+              {
+                "name": "Region",
+                "dataType": "string",
+                "sourceColumn": "Region",
+                "sourceProviderType": "WChar"
+              },
+              {
+                "name": "Category",
+                "dataType": "string",
+                "sourceColumn": "Category",
+                "sourceProviderType": "WChar"
+              },
+              {
+                "name": "Package",
+                "dataType": "string",
+                "sourceColumn": "Package",
+                "sourceProviderType": "WChar"
+              },
+              {
+                "name": "Campaign",
+                "dataType": "int64",
+                "sourceColumn": "Campaign",
+                "sourceProviderType": "Integer",
+                "summarizeBy": "none"
+              },
+              {
+                "name": "Campaign_wk",
+                "dataType": "int64",
+                "sourceColumn": "Campaign_wk",
+                "sourceProviderType": "Integer",
+                "summarizeBy": "none"
+              },
+              {
+                "name": "Date_price",
+                "dataType": "dateTime",
+                "sourceColumn": "Date_price",
+                "formatString": "General Date",
+                "sourceProviderType": "DBDate"
+              },
+              {
+                "name": "Currency",
+                "dataType": "string",
+                "sourceColumn": "Currency",
+                "sourceProviderType": "WChar"
+              },
+              {
+                "name": "Measure",
+                "dataType": "string",
+                "sourceColumn": "Measure",
+                "sourceProviderType": "WChar"
+              },
+              {
+                "name": "Updated",
+                "dataType": "dateTime",
+                "sourceColumn": "Updated",
+                "formatString": "General Date",
+                "sourceProviderType": "DBTimeStamp"
+              },
+              {
+                "name": "Price_data",
+                "dataType": "double",
+                "sourceColumn": "Price",
+                "sourceProviderType": "Double",
+                "summarizeBy": "none"
+              },
+              {
+                "type": "calculated",
+                "name": "Campaign_period",
+                "dataType": "string",
+                "isDataTypeInferred": true,
+                "expression": "CONCATENATE(CONCATENATE(prices[Campaign],\"-\"),RIGHT(CONCATENATE(\"0\",prices[Campaign_wk]),2))"
+              },
+              {
+                "name": "Trade_Country",
+                "dataType": "string",
+                "sourceColumn": "Trade_Country"
+              },
+              {
+                "type": "calculated",
+                "name": "Trade_Country_Name",
+                "dataType": "string",
+                "isDataTypeInferred": true,
+                "expression": "RELATED(trade_country[Country_name])"
+              }
+            ],
+            "partitions": [
+              {
+                "name": "prices",
+                "dataView": "full",
+                "source": {
+                  "query": "SELECT * FROM [dbo].[prices]",
+                  "dataSource": "SqlServer bipro02adminbi Prices"
+                },
+                "annotations": [
+                  {
+                    "name": "QueryEditorSerialization",
+                    "value": "<?xml version=\"1.0\" encoding=\"UTF-16\"?><Gemini xmlns=\"QueryEditorSerialization\"><AnnotationContent><![CDATA[<RSQueryCommandText>SELECT * FROM [dbo].[prices]</RSQueryCommandText><RSQueryCommandType>Text</RSQueryCommandType><RSQueryDesignState></RSQueryDesignState>]]></AnnotationContent></Gemini>"
+                  }
+                ]
+              }
+            ],
+            "measures": [
+              {
+                "name": "Price",
+                "expression": "AVERAGE(prices[Price_data])",
+                "formatString": "#,0.00"
+              }
+            ],
+            "annotations": [
+              {
+                "name": "_TM_ExtProp_QueryDefinition",
+                "value": "SELECT * FROM [dbo].[prices]"
+              },
+              {
+                "name": "_TM_ExtProp_DbTableName",
+                "value": "prices"
+              },
+              {
+                "name": "_TM_ExtProp_DbSchemaName",
+                "value": "dbo"
+              },
+              {
+                "name": "QueryEditorSerialization",
+                "value": "<?xml version=\"1.0\" encoding=\"UTF-16\"?><Gemini xmlns=\"QueryEditorSerialization\"><AnnotationContent><![CDATA[<RSQueryCommandText>SELECT * FROM [dbo].[prices]</RSQueryCommandText><RSQueryCommandType>Text</RSQueryCommandType><RSQueryDesignState></RSQueryDesignState>]]></AnnotationContent></Gemini>"
+              }
+            ]
+          },
+          {
+            "name": "regions",
+            "columns": [
+              {
+                "name": "ID",
+                "dataType": "int64",
+                "sourceColumn": "ID",
+                "sourceProviderType": "Integer",
+                "summarizeBy": "none"
+              },
+              {
+                "name": "Country",
+                "dataType": "string",
+                "sourceColumn": "Country",
+                "sourceProviderType": "WChar",
+                "dataCategory": "Country"
+              },
+              {
+                "name": "Region",
+                "dataType": "string",
+                "sourceColumn": "Region",
+                "sourceProviderType": "WChar",
+                "dataCategory": "City"
+              },
+              {
+                "name": "Lat",
+                "dataType": "double",
+                "sourceColumn": "Lat",
+                "sourceProviderType": "Numeric",
+                "dataCategory": "Latitude",
+                "summarizeBy": "none"
+              },
+              {
+                "name": "Lon",
+                "dataType": "double",
+                "sourceColumn": "Lon",
+                "sourceProviderType": "Numeric",
+                "dataCategory": "Longitude",
+                "summarizeBy": "none"
+              },
+              {
+                "name": "State",
+                "dataType": "string",
+                "sourceColumn": "State",
+                "dataCategory": "StateOrProvince"
+              }
+            ],
+            "partitions": [
+              {
+                "name": "regions",
+                "dataView": "full",
+                "source": {
+                  "query": "SELECT * FROM [dbo].[regions]",
+                  "dataSource": "SqlServer bipro02adminbi Prices"
+                },
+                "annotations": [
+                  {
+                    "name": "QueryEditorSerialization",
+                    "value": "<?xml version=\"1.0\" encoding=\"UTF-16\"?><Gemini xmlns=\"QueryEditorSerialization\"><AnnotationContent><![CDATA[<RSQueryCommandText>SELECT * FROM [dbo].[regions]</RSQueryCommandText><RSQueryCommandType>Text</RSQueryCommandType><RSQueryDesignState></RSQueryDesignState>]]></AnnotationContent></Gemini>"
+                  }
+                ]
+              }
+            ],
+            "annotations": [
+              {
+                "name": "_TM_ExtProp_QueryDefinition",
+                "value": "SELECT * FROM [dbo].[regions]"
+              },
+              {
+                "name": "_TM_ExtProp_DbTableName",
+                "value": "regions"
+              },
+              {
+                "name": "_TM_ExtProp_DbSchemaName",
+                "value": "dbo"
+              },
+              {
+                "name": "QueryEditorSerialization",
+                "value": "<?xml version=\"1.0\" encoding=\"UTF-16\"?><Gemini xmlns=\"QueryEditorSerialization\"><AnnotationContent><![CDATA[<RSQueryCommandText>SELECT * FROM [dbo].[regions]</RSQueryCommandText><RSQueryCommandType>Text</RSQueryCommandType><RSQueryDesignState></RSQueryDesignState>]]></AnnotationContent></Gemini>"
+              }
+            ]
+          },
+          {
+            "name": "volumes",
+            "columns": [
+              {
+                "name": "Product",
+                "dataType": "string",
+                "sourceColumn": "Product",
+                "sourceProviderType": "Char"
+              },
+              {
+                "name": "Country",
+                "dataType": "string",
+                "sourceColumn": "Country",
+                "sourceProviderType": "Char"
+              },
+              {
+                "name": "Measure",
+                "dataType": "string",
+                "sourceColumn": "Measure",
+                "sourceProviderType": "Char"
+              },
+              {
+                "name": "Volume_data",
+                "dataType": "double",
+                "sourceColumn": "Volume",
+                "sourceProviderType": "Double",
+                "summarizeBy": "none"
+              },
+              {
+                "name": "ID",
+                "dataType": "int64",
+                "isHidden": true,
+                "sourceColumn": "ID",
+                "summarizeBy": "none"
+              },
+              {
+                "name": "Region",
+                "dataType": "string",
+                "sourceColumn": "Region"
+              },
+              {
+                "name": "Trade_Type",
+                "dataType": "string",
+                "sourceColumn": "Trade_Type"
+              },
+              {
+                "name": "Trade_Country",
+                "dataType": "string",
+                "sourceColumn": "Trade_Country"
+              },
+              {
+                "name": "Category",
+                "dataType": "string",
+                "sourceColumn": "Category"
+              },
+              {
+                "name": "Package",
+                "dataType": "string",
+                "sourceColumn": "Package"
+              },
+              {
+                "name": "Transport",
+                "dataType": "string",
+                "sourceColumn": "Transport"
+              },
+              {
+                "name": "Campaign",
+                "dataType": "int64",
+                "sourceColumn": "Campaign",
+                "summarizeBy": "none"
+              },
+              {
+                "name": "Campaign_wk",
+                "dataType": "int64",
+                "sourceColumn": "Campaign_wk",
+                "summarizeBy": "none"
+              },
+              {
+                "name": "Date_volume",
+                "dataType": "dateTime",
+                "sourceColumn": "Date_volume"
+              },
+              {
+                "name": "Updated",
+                "dataType": "dateTime",
+                "sourceColumn": "Updated"
+              },
+              {
+                "type": "calculated",
+                "name": "Trade_Country_Name",
+                "dataType": "string",
+                "isDataTypeInferred": true,
+                "expression": "RELATED(trade_country[Country_name])"
+              }
+            ],
+            "partitions": [
+              {
+                "name": "volumes",
+                "dataView": "full",
+                "source": {
+                  "query": "SELECT * FROM [dbo].[volumes]",
+                  "dataSource": "SqlServer bipro02adminbi Prices"
+                },
+                "annotations": [
+                  {
+                    "name": "QueryEditorSerialization",
+                    "value": "<?xml version=\"1.0\" encoding=\"UTF-16\"?><Gemini xmlns=\"QueryEditorSerialization\"><AnnotationContent><![CDATA[<RSQueryCommandText>SELECT * FROM [dbo].[volumes]</RSQueryCommandText><RSQueryCommandType>Text</RSQueryCommandType><RSQueryDesignState></RSQueryDesignState>]]></AnnotationContent></Gemini>"
+                  }
+                ]
+              }
+            ],
+            "measures": [
+              {
+                "name": "Volume",
+                "expression": "SUM(volumes[Volume_data])",
+                "formatString": "#,0"
+              }
+            ],
+            "annotations": [
+              {
+                "name": "_TM_ExtProp_QueryDefinition",
+                "value": "SELECT * FROM [dbo].[volumes]"
+              },
+              {
+                "name": "_TM_ExtProp_DbTableName",
+                "value": "volumes"
+              },
+              {
+                "name": "_TM_ExtProp_DbSchemaName",
+                "value": "dbo"
+              },
+              {
+                "name": "QueryEditorSerialization",
+                "value": "<?xml version=\"1.0\" encoding=\"UTF-16\"?><Gemini xmlns=\"QueryEditorSerialization\"><AnnotationContent><![CDATA[<RSQueryCommandText>SELECT * FROM [dbo].[volumes]</RSQueryCommandText><RSQueryCommandType>Text</RSQueryCommandType><RSQueryDesignState></RSQueryDesignState>]]></AnnotationContent></Gemini>"
+              }
+            ]
+          },
+          {
+            "name": "formats",
+            "isHidden": true,
+            "columns": [
+              {
+                "name": "Format",
+                "dataType": "string",
+                "sourceColumn": "Format",
+                "sourceProviderType": "Char"
+              },
+              {
+                "name": "Measure",
+                "dataType": "string",
+                "sourceColumn": "Measure",
+                "sourceProviderType": "Char"
+              },
+              {
+                "name": "Weight",
+                "dataType": "double",
+                "sourceColumn": "Weight",
+                "sourceProviderType": "Double"
+              }
+            ],
+            "partitions": [
+              {
+                "name": "formats",
+                "dataView": "full",
+                "source": {
+                  "query": " SELECT [dbo].[formats].* FROM [dbo].[formats] ",
+                  "dataSource": "SqlServer bipro02adminbi Prices"
+                }
+              }
+            ],
+            "annotations": [
+              {
+                "name": "_TM_ExtProp_QueryDefinition",
+                "value": " SELECT [dbo].[formats].* FROM [dbo].[formats] "
+              },
+              {
+                "name": "_TM_ExtProp_DbTableName",
+                "value": "formats"
+              },
+              {
+                "name": "_TM_ExtProp_DbSchemaName",
+                "value": "dbo"
+              }
+            ]
+          },
+          {
+            "name": "time",
+            "columns": [
+              {
+                "name": "PK_TIME",
+                "dataType": "double",
+                "isHidden": true,
+                "sourceColumn": "PK_TIME",
+                "sourceProviderType": "Numeric"
+              },
+              {
+                "name": "PK_LNGP",
+                "dataType": "string",
+                "isHidden": true,
+                "sourceColumn": "PK_LNGP",
+                "sourceProviderType": "WChar"
+              },
+              {
+                "name": "DATE_TIME",
+                "dataType": "dateTime",
+                "isHidden": true,
+                "sourceColumn": "DATE_TIME",
+                "formatString": "General Date",
+                "sourceProviderType": "DBTimeStamp"
+              },
+              {
+                "name": "QUARTER_TIME",
+                "dataType": "double",
+                "isHidden": true,
+                "sourceColumn": "QUARTER_TIME",
+                "sourceProviderType": "Double"
+              },
+              {
+                "name": "MONTH_TIME",
+                "dataType": "double",
+                "isHidden": true,
+                "sourceColumn": "MONTH_TIME",
+                "sourceProviderType": "Double"
+              },
+              {
+                "name": "WEEK_TIME",
+                "dataType": "double",
+                "isHidden": true,
+                "sourceColumn": "WEEK_TIME",
+                "sourceProviderType": "Double"
+              },
+              {
+                "name": "DAY_TIME",
+                "dataType": "double",
+                "isHidden": true,
+                "sourceColumn": "DAY_TIME",
+                "sourceProviderType": "Double"
+              },
+              {
+                "name": "WEEKDAY_TIME",
+                "dataType": "double",
+                "isHidden": true,
+                "sourceColumn": "WEEKDAY_TIME",
+                "sourceProviderType": "Double"
+              },
+              {
+                "name": "QUARTER_DESC_TIME",
+                "dataType": "string",
+                "isHidden": true,
+                "sourceColumn": "QUARTER_DESC_TIME",
+                "sourceProviderType": "Char"
+              },
+              {
+                "name": "MONTH_DESC_TIME",
+                "dataType": "string",
+                "isHidden": true,
+                "sourceColumn": "MONTH_DESC_TIME",
+                "sourceProviderType": "Char"
+              },
+              {
+                "name": "MONTH_DESC3L_TIME",
+                "dataType": "string",
+                "isHidden": true,
+                "sourceColumn": "MONTH_DESC3L_TIME",
+                "sourceProviderType": "Char"
+              },
+              {
+                "name": "WEEK_DESC_TIME",
+                "dataType": "string",
+                "isHidden": true,
+                "sourceColumn": "WEEK_DESC_TIME",
+                "sourceProviderType": "Char"
+              },
+              {
+                "name": "DAY_DESC_TIME",
+                "dataType": "string",
+                "isHidden": true,
+                "sourceColumn": "DAY_DESC_TIME",
+                "sourceProviderType": "Char"
+              },
+              {
+                "name": "WEEKDAY_DESC_TIME",
+                "dataType": "string",
+                "isHidden": true,
+                "sourceColumn": "WEEKDAY_DESC_TIME",
+                "sourceProviderType": "Char"
+              },
+              {
+                "name": "JULIAN_TIME",
+                "dataType": "double",
+                "isHidden": true,
+                "sourceColumn": "JULIAN_TIME",
+                "sourceProviderType": "Double"
+              },
+              {
+                "name": "FORTNIGHT_TIME",
+                "dataType": "double",
+                "isHidden": true,
+                "sourceColumn": "FORTNIGHT_TIME",
+                "sourceProviderType": "Double"
+              },
+              {
+                "name": "FORTNIGHT_DESC_TIME",
+                "dataType": "string",
+                "isHidden": true,
+                "sourceColumn": "FORTNIGHT_DESC_TIME",
+                "sourceProviderType": "Char"
+              },
+              {
+                "name": "PK_TIME_FIRST_MONTH",
+                "dataType": "double",
+                "isHidden": true,
+                "sourceColumn": "PK_TIME_FIRST_MONTH",
+                "sourceProviderType": "Numeric"
+              },
+              {
+                "name": "PK_TIME_FIRST_YEAR",
+                "dataType": "double",
+                "isHidden": true,
+                "sourceColumn": "PK_TIME_FIRST_YEAR",
+                "sourceProviderType": "Numeric"
+              },
+              {
+                "name": "PK_TIME_FIRST_MONTH_LNGP",
+                "dataType": "string",
+                "isHidden": true,
+                "sourceColumn": "PK_TIME_FIRST_MONTH_LNGP",
+                "sourceProviderType": "WChar"
+              },
+              {
+                "name": "PK_TIME_FIRST_YEAR_LNGP",
+                "dataType": "string",
+                "isHidden": true,
+                "sourceColumn": "PK_TIME_FIRST_YEAR_LNGP",
+                "sourceProviderType": "WChar"
+              },
+              {
+                "name": "PK_TIME_LNGP",
+                "dataType": "string",
+                "isHidden": true,
+                "sourceColumn": "PK_TIME_LNGP",
+                "sourceProviderType": "WChar"
+              },
+              {
+                "name": "FY_YEAR_TIME",
+                "dataType": "double",
+                "isHidden": true,
+                "sourceColumn": "FY_YEAR_TIME",
+                "sourceProviderType": "Double"
+              },
+              {
+                "name": "FY_QUARTER",
+                "dataType": "double",
+                "isHidden": true,
+                "sourceColumn": "FY_QUARTER",
+                "sourceProviderType": "Double"
+              },
+              {
+                "name": "FY_MONTH",
+                "dataType": "double",
+                "isHidden": true,
+                "sourceColumn": "FY_MONTH",
+                "sourceProviderType": "Double"
+              },
+              {
+                "name": "FY_QUARTER_DESC_TIME",
+                "dataType": "string",
+                "isHidden": true,
+                "sourceColumn": "FY_QUARTER_DESC_TIME",
+                "sourceProviderType": "Char"
+              },
+              {
+                "name": "fY_PK_TIME_FIRST_MONTH",
+                "dataType": "double",
+                "isHidden": true,
+                "sourceColumn": "fY_PK_TIME_FIRST_MONTH",
+                "sourceProviderType": "Numeric"
+              },
+              {
+                "name": "FY_PK_TIME_FIRST_YEAR",
+                "dataType": "double",
+                "isHidden": true,
+                "sourceColumn": "FY_PK_TIME_FIRST_YEAR",
+                "sourceProviderType": "Numeric"
+              },
+              {
+                "name": "YEAR_TIME_FISCAL_SALES",
+                "dataType": "double",
+                "isHidden": true,
+                "sourceColumn": "YEAR_TIME_FISCAL_SALES",
+                "sourceProviderType": "Double"
+              },
+              {
+                "name": "DATE_TIME_FISCAL_SALES",
+                "dataType": "dateTime",
+                "isHidden": true,
+                "sourceColumn": "DATE_TIME_FISCAL_SALES",
+                "formatString": "General Date",
+                "sourceProviderType": "DBTimeStamp"
+              },
+              {
+                "name": "PK_TIME_FIRST_MONTH_FISCAL_SALES",
+                "dataType": "double",
+                "isHidden": true,
+                "sourceColumn": "PK_TIME_FIRST_MONTH_FISCAL_SALES",
+                "sourceProviderType": "Numeric"
+              },
+              {
+                "type": "calculated",
+                "name": "Date MMYY",
+                "dataType": "dateTime",
+                "isDataTypeInferred": true,
+                "expression": "'time'[DATE_TIME]",
+                "formatString": "MMMM\" de \"yyyy",
+                "annotations": [
+                  {
+                    "name": "Format",
+                    "value": "<Format Format=\"DateTimeCustom\"><DateTimes><DateTime LCID=\"3082\" Group=\"YearMonth\" FormatString=\"MMMM' de 'yyyy\" /></DateTimes></Format>"
+                  }
+                ]
+              },
+              {
+                "type": "calculated",
+                "name": "Price date",
+                "dataType": "dateTime",
+                "isDataTypeInferred": true,
+                "expression": "'time'[DATE_TIME]",
+                "formatString": "Short Date",
+                "annotations": [
+                  {
+                    "name": "Format",
+                    "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+                  }
+                ]
+              },
+              {
+                "name": "Year",
+                "dataType": "int64",
+                "sourceColumn": "YEAR_TIME",
+                "sourceProviderType": "Double",
+                "summarizeBy": "none"
+              }
+            ],
+            "partitions": [
+              {
+                "name": "PL_DIM_TIME",
+                "dataView": "full",
+                "source": {
+                  "query": "SELECT [dbo].[PL_DIM_TIME].* FROM [dbo].[PL_DIM_TIME] where [PK_LNGP]='en'",
+                  "dataSource": "SqlServer bipro02adminbi PLANASA_DWH"
+                },
+                "annotations": [
+                  {
+                    "name": "QueryEditorSerialization",
+                    "value": "<?xml version=\"1.0\" encoding=\"UTF-16\"?><Gemini xmlns=\"QueryEditorSerialization\"><AnnotationContent><![CDATA[<RSQueryCommandText>SELECT [dbo].[PL_DIM_TIME].* FROM [dbo].[PL_DIM_TIME] where [PK_LNGP]='en'</RSQueryCommandText><RSQueryCommandType>Text</RSQueryCommandType><RSQueryDesignState></RSQueryDesignState>]]></AnnotationContent></Gemini>"
+                  }
+                ]
+              }
+            ],
+            "annotations": [
+              {
+                "name": "_TM_ExtProp_QueryDefinition",
+                "value": "SELECT [dbo].[PL_DIM_TIME].* FROM [dbo].[PL_DIM_TIME] where [PK_LNGP]='en'"
+              },
+              {
+                "name": "_TM_ExtProp_DbTableName",
+                "value": "PL_DIM_TIME"
+              },
+              {
+                "name": "_TM_ExtProp_DbSchemaName",
+                "value": "dbo"
+              },
+              {
+                "name": "QueryEditorSerialization",
+                "value": "<?xml version=\"1.0\" encoding=\"UTF-16\"?><Gemini xmlns=\"QueryEditorSerialization\"><AnnotationContent><![CDATA[<RSQueryCommandText>SELECT [dbo].[PL_DIM_TIME].* FROM [dbo].[PL_DIM_TIME] where [PK_LNGP]='en'</RSQueryCommandText><RSQueryCommandType>Text</RSQueryCommandType><RSQueryDesignState></RSQueryDesignState>]]></AnnotationContent></Gemini>"
+              }
+            ]
+          },
+          {
+            "name": "campaign",
+            "columns": [
+              {
+                "name": "PK_TIME_FIRST_YEAR",
+                "dataType": "double",
+                "isHidden": true,
+                "sourceColumn": "PK_TIME_FIRST_YEAR",
+                "sourceProviderType": "Numeric"
+              },
+              {
+                "name": "Year",
+                "dataType": "int64",
+                "sourceColumn": "YEAR_TIME",
+                "formatString": "0",
+                "sourceProviderType": "Double",
+                "summarizeBy": "none"
+              }
+            ],
+            "partitions": [
+              {
+                "name": "PL_DIM_TIME_YEAR",
+                "dataView": "full",
+                "source": {
+                  "query": " SELECT [dbo].[PL_DIM_TIME_YEAR].* FROM [dbo].[PL_DIM_TIME_YEAR] ",
+                  "dataSource": "SqlServer bipro02adminbi PLANASA_DWH"
+                }
+              }
+            ],
+            "annotations": [
+              {
+                "name": "_TM_ExtProp_QueryDefinition",
+                "value": " SELECT [dbo].[PL_DIM_TIME_YEAR].* FROM [dbo].[PL_DIM_TIME_YEAR] "
+              },
+              {
+                "name": "_TM_ExtProp_DbTableName",
+                "value": "PL_DIM_TIME_YEAR"
+              },
+              {
+                "name": "_TM_ExtProp_DbSchemaName",
+                "value": "dbo"
+              }
+            ]
+          },
+          {
+            "name": "product",
+            "columns": [
+              {
+                "name": "Product",
+                "dataType": "string",
+                "sourceColumn": "PRODUCT",
+                "sourceProviderType": "VarChar"
+              }
+            ],
+            "partitions": [
+              {
+                "name": "Query",
+                "dataView": "full",
+                "source": {
+                  "query": [
+                    "SELECT 'BLUEBERRIES' AS PRODUCT",
+                    "UNION ALL",
+                    "SELECT 'STRAWBERRIES' AS PRODUCT",
+                    "UNION ALL",
+                    "SELECT 'RASPBERRIES' AS PRODUCT;"
+                  ],
+                  "dataSource": "SqlServer bipro02adminbi PLANASA_DWH"
+                },
+                "annotations": [
+                  {
+                    "name": "QueryEditorSerialization",
+                    "value": [
+                      "<?xml version=\"1.0\" encoding=\"UTF-16\"?><Gemini xmlns=\"QueryEditorSerialization\"><AnnotationContent><![CDATA[<RSQueryCommandText>SELECT 'BLUEBERRIES' AS PRODUCT",
+                      "UNION ALL",
+                      "SELECT 'STRAWBERRIES' AS PRODUCT",
+                      "UNION ALL",
+                      "SELECT 'RASPBERRIES' AS PRODUCT;</RSQueryCommandText><RSQueryCommandType>Text</RSQueryCommandType><RSQueryDesignState></RSQueryDesignState>]]></AnnotationContent></Gemini>"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "annotations": [
+              {
+                "name": "_TM_ExtProp_QueryDefinition",
+                "value": [
+                  "SELECT 'BLUEBERRIES' AS PRODUCT",
+                  "UNION ALL",
+                  "SELECT 'STRAWBERRIES' AS PRODUCT",
+                  "UNION ALL",
+                  "SELECT 'RASPBERRIES' AS PRODUCT;"
+                ]
+              },
+              {
+                "name": "_TM_ExtProp_DbTableName",
+                "value": "Query"
+              },
+              {
+                "name": "QueryEditorSerialization",
+                "value": [
+                  "<?xml version=\"1.0\" encoding=\"UTF-16\"?><Gemini xmlns=\"QueryEditorSerialization\"><AnnotationContent><![CDATA[<RSQueryCommandText>SELECT 'BLUEBERRIES' AS PRODUCT",
+                  "UNION ALL",
+                  "SELECT 'STRAWBERRIES' AS PRODUCT",
+                  "UNION ALL",
+                  "SELECT 'RASPBERRIES' AS PRODUCT;</RSQueryCommandText><RSQueryCommandType>Text</RSQueryCommandType><RSQueryDesignState></RSQueryDesignState>]]></AnnotationContent></Gemini>"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "prices_prediction",
+            "columns": [
+              {
+                "name": "ID",
+                "dataType": "int64",
+                "sourceColumn": "ID",
+                "sourceProviderType": "Integer",
+                "summarizeBy": "none"
+              },
+              {
+                "name": "Product",
+                "dataType": "string",
+                "sourceColumn": "Product",
+                "sourceProviderType": "WChar"
+              },
+              {
+                "name": "Country",
+                "dataType": "string",
+                "sourceColumn": "Country",
+                "sourceProviderType": "WChar"
+              },
+              {
+                "name": "Region",
+                "dataType": "string",
+                "sourceColumn": "Region",
+                "sourceProviderType": "WChar"
+              },
+              {
+                "name": "Trade_Country",
+                "dataType": "string",
+                "sourceColumn": "Trade_Country",
+                "sourceProviderType": "WChar"
+              },
+              {
+                "name": "Category",
+                "dataType": "string",
+                "sourceColumn": "Category",
+                "sourceProviderType": "WChar"
+              },
+              {
+                "name": "Package",
+                "dataType": "string",
+                "sourceColumn": "Package",
+                "sourceProviderType": "WChar"
+              },
+              {
+                "name": "Campaign",
+                "dataType": "int64",
+                "sourceColumn": "Campaign",
+                "sourceProviderType": "Integer",
+                "summarizeBy": "none"
+              },
+              {
+                "name": "Campaign_wk",
+                "dataType": "int64",
+                "sourceColumn": "Campaign_wk",
+                "sourceProviderType": "Integer",
+                "summarizeBy": "none"
+              },
+              {
+                "name": "Date_price",
+                "dataType": "dateTime",
+                "sourceColumn": "Date_price",
+                "formatString": "Short Date",
+                "sourceProviderType": "DBDate",
+                "annotations": [
+                  {
+                    "name": "Format",
+                    "value": "<Format Format=\"DateTimeShortDatePattern\" />"
+                  }
+                ]
+              },
+              {
+                "name": "Currency",
+                "dataType": "string",
+                "sourceColumn": "Currency",
+                "sourceProviderType": "WChar"
+              },
+              {
+                "name": "Measure",
+                "dataType": "string",
+                "sourceColumn": "Measure",
+                "sourceProviderType": "WChar"
+              },
+              {
+                "name": "Model",
+                "dataType": "string",
+                "sourceColumn": "Model",
+                "sourceProviderType": "WChar"
+              },
+              {
+                "name": "Model_measure",
+                "dataType": "string",
+                "isHidden": true,
+                "sourceColumn": "Model_measure",
+                "sourceProviderType": "WChar"
+              },
+              {
+                "name": "Model_measure_result",
+                "dataType": "double",
+                "isHidden": true,
+                "sourceColumn": "Model_measure_result",
+                "sourceProviderType": "Double",
+                "summarizeBy": "none"
+              },
+              {
+                "name": "Price",
+                "dataType": "double",
+                "sourceColumn": "Price",
+                "sourceProviderType": "Double",
+                "summarizeBy": "none"
+              },
+              {
+                "name": "Price_estimated",
+                "dataType": "double",
+                "sourceColumn": "Price_estimated",
+                "sourceProviderType": "Double",
+                "summarizeBy": "none"
+              },
+              {
+                "name": "Updated",
+                "dataType": "dateTime",
+                "sourceColumn": "Updated",
+                "formatString": "General Date",
+                "sourceProviderType": "DBTimeStamp"
+              }
+            ],
+            "partitions": [
+              {
+                "name": "prices_prediction",
+                "dataView": "full",
+                "source": {
+                  "query": [
+                    "SELECT        ID, Product, Country, Region, Trade_Country, Category, Package, Campaign, Campaign_wk, Date_price, Currency, Measure, Model, Model_measure, Model_measure_result, iif(Price=0,NULL,Price) as Price,iif(Price_estimated=0,NULL,Price_estimated) as Price_estimated, Updated",
+                    "FROM            prices_prediction"
+                  ],
+                  "dataSource": "SqlServer bipro02adminbi Prices"
+                },
+                "annotations": [
+                  {
+                    "name": "QueryEditorSerialization",
+                    "value": [
+                      "<?xml version=\"1.0\" encoding=\"UTF-16\"?><Gemini xmlns=\"QueryEditorSerialization\"><AnnotationContent><![CDATA[<RSQueryCommandText>SELECT        ID, Product, Country, Region, Trade_Country, Category, Package, Campaign, Campaign_wk, Date_price, Currency, Measure, Model, Model_measure, Model_measure_result, iif(Price=0,NULL,Price) as Price,iif(Price_estimated=0,NULL,Price_estimated) as Price_estimated, Updated",
+                      "FROM            prices_prediction</RSQueryCommandText><RSQueryCommandType>Text</RSQueryCommandType><RSQueryDesignState></RSQueryDesignState>]]></AnnotationContent></Gemini>"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "measures": [
+              {
+                "name": "Real Price",
+                "expression": "AVERAGE(prices_prediction[Price])",
+                "formatString": "0.00"
+              },
+              {
+                "name": "Estimated Price",
+                "expression": "AVERAGE(prices_prediction[Price_estimated])",
+                "formatString": "0.00"
+              }
+            ],
+            "annotations": [
+              {
+                "name": "_TM_ExtProp_QueryDefinition",
+                "value": [
+                  "SELECT        ID, Product, Country, Region, Trade_Country, Category, Package, Campaign, Campaign_wk, Date_price, Currency, Measure, Model, Model_measure, Model_measure_result, iif(Price=0,NULL,Price) as Price,iif(Price_estimated=0,NULL,Price_estimated) as Price_estimated, Updated",
+                  "FROM            prices_prediction"
+                ]
+              },
+              {
+                "name": "_TM_ExtProp_DbTableName",
+                "value": "prices_prediction"
+              },
+              {
+                "name": "_TM_ExtProp_DbSchemaName",
+                "value": "dbo"
+              },
+              {
+                "name": "QueryEditorSerialization",
+                "value": [
+                  "<?xml version=\"1.0\" encoding=\"UTF-16\"?><Gemini xmlns=\"QueryEditorSerialization\"><AnnotationContent><![CDATA[<RSQueryCommandText>SELECT        ID, Product, Country, Region, Trade_Country, Category, Package, Campaign, Campaign_wk, Date_price, Currency, Measure, Model, Model_measure, Model_measure_result, iif(Price=0,NULL,Price) as Price,iif(Price_estimated=0,NULL,Price_estimated) as Price_estimated, Updated",
+                  "FROM            prices_prediction</RSQueryCommandText><RSQueryCommandType>Text</RSQueryCommandType><RSQueryDesignState></RSQueryDesignState>]]></AnnotationContent></Gemini>"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "volumes_prices",
+            "columns": [
+              {
+                "name": "ID",
+                "dataType": "int64",
+                "sourceColumn": "ID",
+                "sourceProviderType": "Integer",
+                "summarizeBy": "none"
+              },
+              {
+                "name": "Product",
+                "dataType": "string",
+                "sourceColumn": "Product",
+                "sourceProviderType": "WChar"
+              },
+              {
+                "name": "Country",
+                "dataType": "string",
+                "sourceColumn": "Country",
+                "sourceProviderType": "WChar"
+              },
+              {
+                "name": "Trade_Country",
+                "dataType": "string",
+                "sourceColumn": "Trade_Country",
+                "sourceProviderType": "WChar"
+              },
+              {
+                "name": "Category",
+                "dataType": "string",
+                "sourceColumn": "Category",
+                "sourceProviderType": "WChar"
+              },
+              {
+                "name": "Campaign",
+                "dataType": "int64",
+                "sourceColumn": "Campaign",
+                "sourceProviderType": "Integer",
+                "summarizeBy": "none"
+              },
+              {
+                "name": "Campaign_wk",
+                "dataType": "int64",
+                "sourceColumn": "Campaign_wk",
+                "sourceProviderType": "Integer",
+                "summarizeBy": "none"
+              },
+              {
+                "name": "Date_ref",
+                "dataType": "dateTime",
+                "sourceColumn": "Date_ref",
+                "formatString": "General Date",
+                "sourceProviderType": "DBDate"
+              },
+              {
+                "name": "Currency",
+                "dataType": "string",
+                "sourceColumn": "Currency",
+                "sourceProviderType": "WChar"
+              },
+              {
+                "name": "Measure",
+                "dataType": "string",
+                "sourceColumn": "Measure",
+                "sourceProviderType": "WChar"
+              },
+              {
+                "name": "Price",
+                "dataType": "double",
+                "sourceColumn": "Price",
+                "sourceProviderType": "Double",
+                "summarizeBy": "none"
+              },
+              {
+                "name": "Volume",
+                "dataType": "double",
+                "sourceColumn": "Volume",
+                "sourceProviderType": "Double",
+                "summarizeBy": "none"
+              },
+              {
+                "name": "Updated",
+                "dataType": "dateTime",
+                "sourceColumn": "Updated",
+                "formatString": "General Date",
+                "sourceProviderType": "DBTimeStamp"
+              },
+              {
+                "name": "Amount",
+                "dataType": "double",
+                "sourceColumn": "Amount",
+                "formatString": "#,0.00"
+              }
+            ],
+            "partitions": [
+              {
+                "name": "volumes_prices",
+                "dataView": "full",
+                "source": {
+                  "query": "SELECT [dbo].[volumes_prices].*,isnull([Price]*[Volume],0) as [Amount] FROM [dbo].[volumes_prices]",
+                  "dataSource": "SqlServer bipro02adminbi Prices"
+                },
+                "annotations": [
+                  {
+                    "name": "QueryEditorSerialization",
+                    "value": "<?xml version=\"1.0\" encoding=\"UTF-16\"?><Gemini xmlns=\"QueryEditorSerialization\"><AnnotationContent><![CDATA[<RSQueryCommandText>SELECT [dbo].[volumes_prices].*,isnull([Price]*[Volume],0) as [Amount] FROM [dbo].[volumes_prices]</RSQueryCommandText><RSQueryCommandType>Text</RSQueryCommandType><RSQueryDesignState></RSQueryDesignState>]]></AnnotationContent></Gemini>"
+                  }
+                ]
+              }
+            ],
+            "measures": [
+              {
+                "name": "Price_vp",
+                "expression": "average(volumes_prices[Price])",
+                "formatString": "0.00"
+              },
+              {
+                "name": "Volume_vp",
+                "expression": "sum(volumes_prices[Volume])",
+                "formatString": "#,0"
+              },
+              {
+                "name": "Amount_vp",
+                "expression": "sum(volumes_prices[Amount])",
+                "formatString": "#,0.00"
+              },
+              {
+                "name": "Price_weighted",
+                "expression": "volumes_prices[Amount_vp]/volumes_prices[Volume_vp]",
+                "formatString": "0.00"
+              }
+            ],
+            "annotations": [
+              {
+                "name": "_TM_ExtProp_QueryDefinition",
+                "value": "SELECT [dbo].[volumes_prices].*,isnull([Price]*[Volume],0) as [Amount] FROM [dbo].[volumes_prices]"
+              },
+              {
+                "name": "_TM_ExtProp_DbTableName",
+                "value": "volumes_prices"
+              },
+              {
+                "name": "_TM_ExtProp_DbSchemaName",
+                "value": "dbo"
+              },
+              {
+                "name": "QueryEditorSerialization",
+                "value": "<?xml version=\"1.0\" encoding=\"UTF-16\"?><Gemini xmlns=\"QueryEditorSerialization\"><AnnotationContent><![CDATA[<RSQueryCommandText>SELECT [dbo].[volumes_prices].*,isnull([Price]*[Volume],0) as [Amount] FROM [dbo].[volumes_prices]</RSQueryCommandText><RSQueryCommandType>Text</RSQueryCommandType><RSQueryDesignState></RSQueryDesignState>]]></AnnotationContent></Gemini>"
+              }
+            ]
+          },
+          {
+            "name": "trade_country",
+            "columns": [
+              {
+                "name": "Country_name",
+                "dataType": "string",
+                "sourceColumn": "Country_name",
+                "sourceProviderType": "WChar",
+                "dataCategory": "Country"
+              },
+              {
+                "name": "ISO2",
+                "dataType": "string",
+                "isHidden": true,
+                "sourceColumn": "ISO2",
+                "sourceProviderType": "Char"
+              },
+              {
+                "name": "ISO3",
+                "dataType": "string",
+                "isHidden": true,
+                "sourceColumn": "ISO3",
+                "sourceProviderType": "Char"
+              },
+              {
+                "name": "ccTLD",
+                "dataType": "string",
+                "isHidden": true,
+                "sourceColumn": "ccTLD",
+                "sourceProviderType": "Char"
+              },
+              {
+                "name": "Continent",
+                "dataType": "string",
+                "sourceColumn": "Continent",
+                "sourceProviderType": "Char",
+                "dataCategory": "Continent"
+              }
+            ],
+            "partitions": [
+              {
+                "name": "countries",
+                "dataView": "full",
+                "source": {
+                  "query": " SELECT [dbo].[countries].* FROM [dbo].[countries] ",
+                  "dataSource": "SqlServer bipro02adminbi Prices"
+                }
+              }
+            ],
+            "annotations": [
+              {
+                "name": "_TM_ExtProp_QueryDefinition",
+                "value": " SELECT [dbo].[countries].* FROM [dbo].[countries] "
+              },
+              {
+                "name": "_TM_ExtProp_DbTableName",
+                "value": "countries"
+              },
+              {
+                "name": "_TM_ExtProp_DbSchemaName",
+                "value": "dbo"
+              }
+            ]
+          },
+          {
+            "name": "models",
+            "columns": [
+              {
+                "name": "Model",
+                "dataType": "string",
+                "sourceColumn": "Model",
+                "sourceProviderType": "WChar"
+              },
+              {
+                "name": "Product",
+                "dataType": "string",
+                "sourceColumn": "Product",
+                "sourceProviderType": "WChar"
+              },
+              {
+                "name": "Country",
+                "dataType": "string",
+                "sourceColumn": "Country",
+                "sourceProviderType": "WChar"
+              },
+              {
+                "name": "Trade_Country",
+                "dataType": "string",
+                "sourceColumn": "Trade_Country",
+                "sourceProviderType": "WChar"
+              },
+              {
+                "name": "Category",
+                "dataType": "string",
+                "sourceColumn": "Category",
+                "sourceProviderType": "WChar"
+              },
+              {
+                "name": "Concept",
+                "dataType": "string",
+                "sourceColumn": "Concept",
+                "sourceProviderType": "WChar"
+              },
+              {
+                "name": "Result",
+                "dataType": "double",
+                "sourceColumn": "Result",
+                "sourceProviderType": "Double",
+                "summarizeBy": "none"
+              },
+              {
+                "name": "Updated",
+                "dataType": "dateTime",
+                "sourceColumn": "Updated",
+                "formatString": "General Date",
+                "sourceProviderType": "DBTimeStamp"
+              }
+            ],
+            "partitions": [
+              {
+                "name": "models",
+                "dataView": "full",
+                "source": {
+                  "query": " SELECT [dbo].[models].* FROM [dbo].[models] ",
+                  "dataSource": "SqlServer bipro02adminbi Prices"
+                }
+              }
+            ],
+            "annotations": [
+              {
+                "name": "_TM_ExtProp_QueryDefinition",
+                "value": " SELECT [dbo].[models].* FROM [dbo].[models] "
+              },
+              {
+                "name": "_TM_ExtProp_DbTableName",
+                "value": "models"
+              },
+              {
+                "name": "_TM_ExtProp_DbSchemaName",
+                "value": "dbo"
+              }
+            ]
+          }
+        ],
+        "relationships": [
+          {
+            "name": "d0356b60-abb0-4d84-9e61-6a8cd33f514e",
+            "fromTable": "prices",
+            "fromColumn": "Region",
+            "toTable": "regions",
+            "toColumn": "Region"
+          },
+          {
+            "name": "843eb73c-f609-4fbd-a372-23deeb01b3ac",
+            "fromTable": "prices",
+            "fromColumn": "Date_price",
+            "toTable": "time",
+            "toColumn": "DATE_TIME"
+          },
+          {
+            "name": "9d50204a-02c2-4c04-bc7e-c03dfb89888a",
+            "fromTable": "volumes",
+            "fromColumn": "Region",
+            "toTable": "regions",
+            "toColumn": "Region"
+          },
+          {
+            "name": "fc3dc9db-c836-4556-8ff5-e2377b0f0747",
+            "fromTable": "volumes",
+            "fromColumn": "Date_volume",
+            "toTable": "time",
+            "toColumn": "DATE_TIME"
+          },
+          {
+            "name": "9166cc45-1337-42dc-b1ff-465dcf0c3839",
+            "fromTable": "volumes",
+            "fromColumn": "Trade_Country",
+            "toTable": "trade_country",
+            "toColumn": "ISO2"
+          },
+          {
+            "name": "2645a1b2-a7d2-46d9-866b-04884f3bf246",
+            "fromTable": "prices",
+            "fromColumn": "Trade_Country",
+            "toTable": "trade_country",
+            "toColumn": "ISO2"
+          },
+          {
+            "name": "ea58d0ef-10af-485c-87c6-6f4dd649cf9f",
+            "fromTable": "volumes",
+            "fromColumn": "Campaign",
+            "toTable": "campaign",
+            "toColumn": "Year"
+          },
+          {
+            "name": "10133851-41e9-466b-96ba-e2b5573c2049",
+            "fromTable": "prices",
+            "fromColumn": "Product",
+            "toTable": "product",
+            "toColumn": "Product"
+          },
+          {
+            "name": "22b5c7eb-e730-460b-92ed-8ea5a2582dc3",
+            "fromTable": "volumes",
+            "fromColumn": "Product",
+            "toTable": "product",
+            "toColumn": "Product"
+          },
+          {
+            "name": "deac989d-1aea-48c8-b30b-39738e8c7235",
+            "fromTable": "prices",
+            "fromColumn": "Campaign",
+            "toTable": "campaign",
+            "toColumn": "Year"
+          },
+          {
+            "name": "f307f680-20ad-4843-8f67-26fe15fd1b37",
+            "fromTable": "prices_prediction",
+            "fromColumn": "Campaign",
+            "toTable": "campaign",
+            "toColumn": "Year"
+          },
+          {
+            "name": "85042741-7f7d-44ac-99c2-f1f8180894ef",
+            "fromTable": "prices_prediction",
+            "fromColumn": "Date_price",
+            "toTable": "time",
+            "toColumn": "DATE_TIME"
+          },
+          {
+            "name": "e7234714-d886-4ee7-af85-ee54ee1f57b3",
+            "fromTable": "prices_prediction",
+            "fromColumn": "Product",
+            "toTable": "product",
+            "toColumn": "Product"
+          },
+          {
+            "name": "401bbede-5599-4559-9bd5-f678a57b4bf6",
+            "fromTable": "prices_prediction",
+            "fromColumn": "Region",
+            "toTable": "regions",
+            "toColumn": "Region"
+          },
+          {
+            "name": "736eb2e6-247d-4b3a-ac4b-0883335d3497",
+            "fromTable": "prices_prediction",
+            "fromColumn": "Trade_Country",
+            "toTable": "trade_country",
+            "toColumn": "ISO2"
+          },
+          {
+            "name": "992c7131-51b7-4c30-aee7-2de944b1c077",
+            "fromTable": "volumes_prices",
+            "fromColumn": "Date_ref",
+            "toTable": "time",
+            "toColumn": "DATE_TIME"
+          },
+          {
+            "name": "8fa578ef-fdce-4efa-af85-e6ff57f8e256",
+            "fromTable": "volumes_prices",
+            "fromColumn": "Campaign",
+            "toTable": "campaign",
+            "toColumn": "Year"
+          },
+          {
+            "name": "e1687912-f2b1-4f78-ac85-c0ff6ceff3db",
+            "fromTable": "volumes_prices",
+            "fromColumn": "Trade_Country",
+            "toTable": "trade_country",
+            "toColumn": "ISO2"
+          },
+          {
+            "name": "d1fbaa58-7e4a-45d4-84ea-fc70ffe5e10f",
+            "fromTable": "volumes_prices",
+            "fromColumn": "Product",
+            "toTable": "product",
+            "toColumn": "Product"
+          }
+        ],
+        "roles": [
+          {
+            "name": "All",
+            "modelPermission": "read",
+            "members": [
+              {
+                "memberName": "PLANASA\\biprices",
+                "memberId": "S-1-5-21-4121965027-2366291090-3008429419-24810"
+              },
+              {
+                "memberName": "PLANASA\\BI_Analysis_Sales",
+                "memberId": "S-1-5-21-4121965027-2366291090-3008429419-18171"
+              },
+              {
+                "memberName": "PLANASA\\BI_Analysis_Sales_All",
+                "memberId": "S-1-5-21-4121965027-2366291090-3008429419-18337"
+              },
+              {
+                "memberName": "PLANASA\\BI_Analysis_Sales_Gestor",
+                "memberId": "S-1-5-21-4121965027-2366291090-3008429419-18445"
+              }
+            ]
+          }
+        ],
+        "annotations": [
+          {
+            "name": "ClientCompatibilityLevel",
+            "value": "400"
+          }
+        ]
+      }
+    }
+  }
+}
