@@ -139,6 +139,8 @@ Then a series of Power BI dashboards connected to this model make possible to lo
 
 Design made with [Cloud Skew app](https://www.cloudskew.com/)
 
+The Jupyter Notebook [step_by_step](notebooks/processing/step_by_step.ipynb) include the whole process from ingesting data to predict. Also this repository includes the [SQL Server instance](data/01_raw/SQL_DB_Prices_CREATES.sql) with all tables structure and the [SSAS model](data/04_visualization/SSAS_Prices_CREATE.xmla). 
+
 # 6_Summary
 
 ### 6_1_Strawberries_Spain
